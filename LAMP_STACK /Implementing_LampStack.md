@@ -182,12 +182,7 @@ By default, Apache prioritizes the `index.html` file over an `index.php` file. T
 
 $ *sudo vim /etc/apache2/mods-enabled/dir.conf*
 
-<IfModule mod_dir.c>
-  # Change this:
-  # DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm
-  # To this:
   DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
-</IfModule>
 
 Reload Apache
 Apache is reloaded so the changes takes effect.
@@ -198,12 +193,5 @@ Create a new file named index.php
 
 $ *vim /var/www/projectlamp/index.php*
 
-Add the text below in the index.php file
-<?php
-phpinfo();
-
-After Reloading the page 😊😊😊
-
-![Aspose Words 5d56049b-1dab-4f29-b5bd-c8099876c392 006](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/4a03805a-361a-4654-a029-6b46fce56795)
 
 
