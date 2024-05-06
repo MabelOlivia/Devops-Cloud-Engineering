@@ -1,5 +1,4 @@
 # What is Web Stack Technology?
-
 Web stack technology, often referred to as a technology stack, is a collection of frameworks and tools specifically chosen to work together in developing a software product. These components are carefully selected to ensure seamless integration and efficient functioning of the software.
 
 Web Stack Examples:
@@ -155,8 +154,6 @@ To interact with the text editor, first hit the “i” key to be in insert mode
     *CustomLog* ${APACHE_LOG_DIR}/access.log combined  
 *</VirtualHost>*
 
-
-
 **Enable virtual host**
 $ *sudo a2ensite projectlamp*
 
@@ -182,7 +179,7 @@ By default, Apache prioritizes the `index.html` file over an `index.php` file. T
 
 $ *sudo vim /etc/apache2/mods-enabled/dir.conf*
 
-  DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
+  *DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm*
 
 Reload Apache
 Apache is reloaded so the changes takes effect.
@@ -193,5 +190,6 @@ Create a new file named index.php
 
 $ *vim /var/www/projectlamp/index.php*
 
+After Reloading the page 
 
-
+![Aspose Words 5d56049b-1dab-4f29-b5bd-c8099876c392 006](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f3b683b2-94a7-4e85-ac91-0686f43ee1b8)
