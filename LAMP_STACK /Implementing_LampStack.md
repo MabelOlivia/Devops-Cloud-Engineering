@@ -103,16 +103,72 @@ The result show be the default Apache2 web page being shown
 
 **Installing MySQL**
 
+MySQL, an open-source relational database management system, enables high availability deployments on AWS instances, catering to both cloud-based and on-premise environments.
+
 $ *sudo apt install mysql-server*
 
 *Logging into mysql*
+$ *sudo mysql*
 
 ![Aspose Words 5d56049b-1dab-4f29-b5bd-c8099876c392 002](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/24b4a9f0-958f-4b5f-a024-111d3d20f857)
 
+Exit the MySQL shell, run the following command:
+$ *mysql> exit*
+
+The security script comes pre-installed with mysql. This script removes some insecure settings and lock down access to the database system.
+
+$ *sudo mysql_secure_installation*
+
+![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/4acdeae1-026c-4b74-aacb-d1663b33e6e2)
+
+
 **Installing PHP**
+
+1. php package
+2. php-mysql, a PHP module that allows PHP to communicate with MySQL-based databases.
+3. libapache2-mod-php, to enable Apache to handle PHP files.
 
 $ sudo apt install php libapache2-mod-php php-mysql
 ![Aspose Words 5d56049b-1dab-4f29-b5bd-c8099876c392 003](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/874b3d3e-0bbd-4cbf-8f6d-b9753a4bc6aa)
+
+**Create a Virtual Host for Your Website Using Apache**
+create a directory for “projectlamp
+
+$ *sudo mkdir /var/www/projectlamp*
+
+creating a new configuration file that will reside in the Apache directory using vi/vim
+Run the following command:
+
+$ *sudo vi /etc/apache2/sites-available/projectlamp.conf*
+
+This will result in a blank text file.
+
+To interact with the text editor, first hit the “i” key to be in insert mode
+
+
+*<VirtualHost *:80>*  
+    *ServerName* projectlamp  
+    *ServerAlias* www.projectlamp   
+    *ServerAdmin* webmaster@localhost  
+    *DocumentRoot* /var/www/projectlamp  
+    *ErrorLog* ${APACHE_LOG_DIR}/error.log  
+    *CustomLog* ${APACHE_LOG_DIR}/access.log combined  
+*</VirtualHost>*
+
+
+
+**Enable virtual host**
+$ *sudo a2ensite projectlamp*
+
+**Disable default Apache website**
+$ *sudo a2dissite 000-default*
+
+ **Check configuration file for errors**
+$ *sudo apache2ctl configtest*
+
+**Reload Apache server to apply changes**
+$ *sudo systemctl reload apache2*
+
 
 create a custom index.html
 
