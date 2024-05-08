@@ -1,4 +1,7 @@
-﻿SQL
+
+# SQL
+
+<img width="350" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3b402062-2390-45d7-a487-d1fefa5ea34b">
 
 SQL (Structured Query Language) is a standardized programming language used for managing and manipulating relational databases. 
 
@@ -8,232 +11,188 @@ SQL provides a set of commands for querying, updating, and managing relational d
 
 SQL syntax consists of a set of rules and conventions for writing SQL statements to interact with databases. Here's a brief overview of the SQL syntax:
 
-1\. \*\*Keywords\*\*: SQL statements are composed of keywords like SELECT, INSERT INTO, UPDATE, DELETE FROM, CREATE TABLE, ALTER TABLE, DROP TABLE, etc. These keywords indicate the type of operation to be performed.
+1\. **Keywords**: SQL statements are composed of keywords like SELECT, INSERT INTO, UPDATE, DELETE FROM, CREATE TABLE, ALTER TABLE, DROP TABLE, etc. These keywords indicate the type of operation to be performed.
 
-2\. \*\*Clauses\*\*: SQL statements typically consist of various clauses, each serving a specific purpose. Common clauses include:
+2\. **Clauses**: SQL statements typically consist of various clauses, each serving a specific purpose. Common clauses include:
 
-`   `- \*\*SELECT\*\*: Specifies the columns to be retrieved from a table.
+   - *SELECT*: Specifies the columns to be retrieved from a table.
 
-`   `- \*\*FROM\*\*: Specifies the table from which to retrieve data.
+   - *FROM* : Specifies the table from which to retrieve data.
 
-`   `- \*\*WHERE\*\*: Filters rows based on specified conditions.
+   - *WHERE*: Filters rows based on specified conditions.
 
-`   `- \*\*GROUP BY\*\*: Groups rows that have the same values into summary rows.
+   - *GROUP BY*: Groups rows that have the same values into summary rows.
 
-`   `- \*\*HAVING\*\*: Filters groups based on specified conditions.
+   - *HAVING*: Filters groups based on specified conditions.
 
-`   `- \*\*ORDER BY\*\*: Sorts the result set based on specified columns.
+   - *ORDER BY*: Sorts the result set based on specified columns.
 
-`   `- \*\*LIMIT/OFFSET\*\*: Limits the number of rows returned by a query.
+   - *LIMIT OFFSET*: Limits the number of rows returned by a query.
 
-`   `- \*\*INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN\*\*: Specifies how tables should be joined together.
+   - *INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN*: Specifies how tables should be joined together.
 
 Here's an example of a simple SQL SELECT statement:
 
-\```sql
-
+```sql
 SELECT column1, column2
-
-FROM table\_name
-
+FROM table_name
 WHERE condition;
-
-\```
+```
 
 This statement selects specific columns (`column1`, `column2`) from a table (`table\_name`) based on a condition specified in the `WHERE` clause.
 
 Here's an overview of some commonly used SQL commands and their syntax
 
-1\. \*\*SELECT\*\*: Retrieves data from the "employees" table.
+1\. **SELECT**: Retrieves data from the "employees" table.
 
-`   ````sql
+```sql
+SELECT employee_id, first_name, last_name FROM employees WHERE department = 'HR';
+```
 
-`   `SELECT employee\_id, first\_name, last\_name FROM employees WHERE department = 'HR';
+2\. **INSERT INTO**: Adds a new record to the "customers" table.
 
-`   ````
+````sql
+INSERT INTO customers (name, email) VALUES ('John Doe', 'john@example.com');
+````
 
-2\. \*\*INSERT INTO\*\*: Adds a new record to the "customers" table.
+3\. **UPDATE**: Modifies existing records in the "products" table.
 
-`   ````sql
+````sql
+UPDATE products SET price = 20.99 WHERE category = 'Electronics';
+````
 
-`   `INSERT INTO customers (name, email) VALUES ('John Doe', 'john@example.com');
+4\. **DELETE**: Removes records from the "orders" table.
 
-`   ````
+````sql
+DELETE FROM orders WHERE status = 'Cancelled';
+````
 
-3\. \*\*UPDATE\*\*: Modifies existing records in the "products" table.
+5\. **CREATE TABLE**: Creates a new table named "students".
 
-`   ````sql
+````sql
+CREATE TABLE students (
+       student_id INT PRIMARY KEY,
 
-`   `UPDATE products SET price = 20.99 WHERE category = 'Electronics';
+       first_name VARCHAR(50),
 
-`   ````
+       last_name VARCHAR(50),
 
-4\. \*\*DELETE\*\*: Removes records from the "orders" table.
+       age INT
+   );
+````
 
-`   ````sql
+6\. **ALTER TABLE**: Adds a new column named "address" to the "customers" table.
 
-`   `DELETE FROM orders WHERE status = 'Cancelled';
+````sql
+ALTER TABLE customers ADD address VARCHAR(100);
+````
 
-`   ````
+7\. **DROP TABLE**: Deletes the "temp_data" table.
 
-5\. \*\*CREATE TABLE\*\*: Creates a new table named "students".
+````sql
+DROP TABLE temp_data;
+````
 
-`   ````sql
+8\. **CREATE INDEX**: Creates an index on the "username" column of the "users" table.
 
-`   `CREATE TABLE students (
+````sql
+CREATE INDEX idx_username ON users (username);
+````
 
-`       `student\_id INT PRIMARY KEY,
+9\. **DROP INDEX**: Deletes the index named "idx_email" from the "customers" table.
 
-`       `first\_name VARCHAR(50),
+````sql
+DROP INDEX idx_email;
+````
 
-`       `last\_name VARCHAR(50),
+10\. **JOIN**: Combines data from the "orders" and "customers" tables.
 
-`       `age INT
+````sql
+SELECT orders.order_id, customers.name 
+FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id;
+````
 
-`   `);
+11\. **GROUP BY**: Groups orders by their status from the "orders" table.
 
-`   ````
+````sql
+SELECT status, COUNT(*) 
+    FROM orders 
+    GROUP BY status;
+````
 
-6\. \*\*ALTER TABLE\*\*: Adds a new column named "address" to the "customers" table.
+12\. **HAVING**: Filters orders with more than 5 items from the "orders" table.
 
-`   ````sql
+````sql
+SELECT customer_id, COUNT(*) as order_count 
+    FROM orders 
+    GROUP BY customer_id 
+    HAVING COUNT(*) > 5;
+````
 
-`   `ALTER TABLE customers ADD address VARCHAR(100);
-
-`   ````
-
-7\. \*\*DROP TABLE\*\*: Deletes the "temp\_data" table.
-
-`   ````sql
-
-`   `DROP TABLE temp\_data;
-
-`   ````
-
-8\. \*\*CREATE INDEX\*\*: Creates an index on the "username" column of the "users" table.
-
-`   ````sql
-
-`   `CREATE INDEX idx\_username ON users (username);
-
-`   ````
-
-9\. \*\*DROP INDEX\*\*: Deletes the index named "idx\_email" from the "customers" table.
-
-`   ````sql
-
-`   `DROP INDEX idx\_email;
-
-`   ````
-
-10\. \*\*JOIN\*\*: Combines data from the "orders" and "customers" tables.
-
-`    ````sql
-
-`    `SELECT orders.order\_id, customers.name 
-
-`    `FROM orders INNER JOIN customers ON orders.customer\_id = customers.customer\_id;
-
-`    ````
-
-11\. \*\*GROUP BY\*\*: Groups orders by their status from the "orders" table.
-
-`    ````sql
-
-`    `SELECT status, COUNT(\*) 
-
-`    `FROM orders 
-
-`    `GROUP BY status;
-
-`    ````
-
-12\. \*\*HAVING\*\*: Filters orders with more than 5 items from the "orders" table.
-
-`    ````sql
-
-`    `SELECT customer\_id, COUNT(\*) as order\_count 
-
-`    `FROM orders 
-
-`    `GROUP BY customer\_id 
-
-`    `HAVING COUNT(\*) > 5;
-
-`    ````
-
-Nano Editor
+# Nano Editor
 
 Nano is a simple and user-friendly text editor commonly found on Unix-based systems. It offers basic text editing functionalities and is ideal for simple tasks such as editing configuration files, writing scripts, or taking quick notes. Nano features easy-to-remember keyboard shortcuts for tasks like saving files, searching for text, cutting and pasting, and navigating within the document. It provides a simple interface suitable for beginners and those who prefer simplicity over advanced features.
 
-\```markdown
 
-1\. \*\*Opening a File:\*\*
+1\. **Opening a File:**
 
-`   ````
+   `nano filename`
 
-`   `nano filename
+2\. **Saving a File:**
 
-`   ````
+   - Press `Ctrl` + `O` (Write Out)
+     Then press `Enter` to confirm the filename.
 
-2\. \*\*Saving a File:\*\*
+3\. **Exiting Nano:**
 
-`   `- Press `Ctrl` + `O` (Write Out)
+   - Press `Ctrl` + `X`.
+     If there are unsaved changes, Nano will prompt you to save them.
 
-`   `- Then press `Enter` to confirm the filename.
+4\. **Moving the Cursor:**
 
-3\. \*\*Exiting Nano:\*\*
+   - Use the arrow keys to move up, down, left, or right.
 
-`   `- Press `Ctrl` + `X`.
+5\. **Cut, Copy, and Paste:**
 
-`   `- If there are unsaved changes, Nano will prompt you to save them.
+   - `Ctrl` + `K`: Cut the current line.
 
-4\. \*\*Moving the Cursor:\*\*
+   - `Ctrl` + `U`: Paste the cut text.
 
-`   `- Use the arrow keys to move up, down, left, or right.
+   - `Alt` + `6`: Copy the current line.
 
-5\. \*\*Cut, Copy, and Paste:\*\*
+   - `Ctrl` + `Shift` + `6`: Paste the copied text.
 
-`   `- `Ctrl` + `K`: Cut the current line.
+6\. **Searching for Text:**
 
-`   `- `Ctrl` + `U`: Paste the cut text.
+   - `Ctrl` + `W`: Search for text.
 
-`   `- `Alt` + `6`: Copy the current line.
+   - Enter the text to search and press `Enter`.
 
-`   `- `Ctrl` + `Shift` + `6`: Paste the copied text.
+   - Use `Ctrl` + `W` to find the next occurrence.
 
-6\. \*\*Searching for Text:\*\*
+7\. **Undo and Redo:**
 
-`   `- `Ctrl` + `W`: Search for text.
+   - `Ctrl` + `Shift` + `\_`: Undo.
 
-`   `- Enter the text to search and press `Enter`.
+   - `Alt` + `U`: Redo.
 
-`   `- Use `Ctrl` + `W` to find the next occurrence.
+8\. **Delete:**
 
-7\. \*\*Undo and Redo:\*\*
+   - `Ctrl` + `D`: Delete the character under the cursor.
 
-`   `- `Ctrl` + `Shift` + `\_`: Undo.
+   - `Ctrl` + `K`: Delete the line after the cursor.
 
-`   `- `Alt` + `U`: Redo.
+9\. **Inserting and Deleting:**
 
-8\. \*\*Delete:\*\*
+   - `Insert`: Toggle between insert and overwrite modes.
 
-`   `- `Ctrl` + `D`: Delete the character under the cursor.
+   - `Backspace` or `Delete`: Delete the character before or after the cursor, respectively.
 
-`   `- `Ctrl` + `K`: Delete the line after the cursor.
+10\. **Page Navigation:**
 
-9\. \*\*Inserting and Deleting:\*\*
+    - `Ctrl` + `V`: Move one page down.
 
-`   `- `Insert`: Toggle between insert and overwrite modes.
+    - `Ctrl` + `Y`: Move one page up.
 
-`   `- `Backspace` or `Delete`: Delete the character before or after the cursor, respectively.
-
-10\. \*\*Page Navigation:\*\*
-
-`    `- `Ctrl` + `V`: Move one page down.
-
-`    `- `Ctrl` + `Y`: Move one page up.
-
-\```
 
 
