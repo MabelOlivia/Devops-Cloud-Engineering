@@ -190,9 +190,7 @@ Nano is a simple and user-friendly text editor commonly found on Unix-based syst
 
 10\. **Page Navigation:**
 
-    - `Ctrl` + `V`: Move one page down.
-
-    - `Ctrl` + `Y`: Move one page up.
-
-
+   - `Ctrl` + `V`: Move one page down
+   - `Ctrl` + `Y`: Move one page up.
+     
 
