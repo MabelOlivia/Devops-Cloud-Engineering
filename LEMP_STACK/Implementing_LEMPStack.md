@@ -25,7 +25,7 @@ sh -i TestKey.pem ubuntu@51.20.3.33
 
 
  
-Installing NginX server
+**Installing Nginx server**
 
 We will start by updating our server
 
@@ -46,9 +46,8 @@ sudo systemctl status nginx
 ```
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 002](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/666d4500-5b25-44c8-8bd0-b098c7d73442)
  
-We have just launched our first server in the clouds!! 😊
-
-
+*We have just launched our first server in the clouds!! 😊* <br>
+<br>
 
 Let us now open TCP port 80 which is the default port that web browsers use to access web pages on the internet 
 
@@ -78,7 +77,8 @@ curl -s http://169.254.169.254/latest/meta-data/public-ipv4
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 005](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f7dfb743-50fe-4216-bd21-dc2ea2785436)
  
 
-Installing MySQL
+**Installing MySQL** <br>
+<br>
 Just like we did on LAMP stack, we will install MySQL
 
 ```
@@ -101,7 +101,7 @@ mysql>exit
 The security script comes pre-installed with mysql. This script removes some insecure settings and lock down access to the database system.
 
 ```
-$ *sudo mysql_secure_installation*
+sudo mysql_secure_installation
 ```
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 007](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/1d07261e-a8a4-41bb-8222-6632d438be04)
 
@@ -110,23 +110,30 @@ To Test whether I can log into mysql
 
 ```
 sudo mysql -p
-![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 008](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d81ab03c-a152-4c69-a2f6-012915956461)
  ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 008](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d81ab03c-a152-4c69-a2f6-012915956461)
+
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 009](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6576ce72-51d7-4625-912a-03c64ffd29cb)
 
 
-We have installed Nginx and MySQL. We will now install PHP just like we did in LAMP stack.
+*We have installed Nginx and MySQL. We will now install PHP just like we did in LAMP stack.*
 
-Installing PHP
+<br>
+<br>
+
+**Installing PHP**
+
 In Apache, PHP processing is handled internally within each request, whereas Nginx requires an external program, php-fpm, to manage PHP processing. This setup enhances performance for PHP-based websites but requires additional configuration. Additionally, php-mysql is needed to facilitate PHP communication with MySQL databases. Core PHP packages are installed automatically as dependencies.
 
 ```
-$ sudo apt install php-fpm php-mysql
+sudo apt install php-fpm php-mysql
 ```
 
-Configuring PHP to use NginX processor
-We will create ProjectLemp as an example domain name.
- We will create a directory within var/www for our domain ProjectLemp
+**Configuring PHP to use Nginx processor** <br>
+<br>
+We will create projectLEMP as an example domain name.
+We will create a directory within var/www for our domain projectLEMP. <br>
+<br>
 Let us create the root web directory for Lempstack
 
 ```
@@ -225,9 +232,9 @@ sudo sh -c "echo 'Hello LEMP from hostname' \$(curl -s http://169.254.169.254/la
 
 
 
-Testing PHP with NginX
+**Testing PHP with Nginx**
 
-To validate that NginX can correctly handle .php files off to our PHP processor, We will create a test PHP file in our document root called info.php
+To validate that Nginx can correctly handle .php files off to our PHP processor, We will create a test PHP file in our document root called info.php
 ```
 nano /var/www/projectLEMP/info.php
 ```
@@ -241,7 +248,9 @@ phpinfo();
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 012](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d54eae86-ce1a-4f79-9151-a6721f41b4ce)
 
 
-RETRIEVING DATA FROM MYSQL DATABASE WITH PHP
+**RETRIEVING DATA FROM MYSQL DATABASE WITH PHP**
+
+
 We will create a test database with a  ‘’To do list’’ and configure access to it so Nginx server can query data from it and display it.
 
 •	First, connect to the MySQL console using the root account:
@@ -253,7 +262,7 @@ sudo mysql
 CREATE DATABASE `example_database`;
 ```
 
-•	We creates a new user named example_user, using mysql_native_password as default authentication method
+•	We will create a new user named example_user, using mysql_native_password as default authentication method
 ```
 CREATE USER 'example_user'@'%' IDENTIFIED WITH mysql_native_password BY 'Password';
 ```
@@ -263,32 +272,45 @@ CREATE USER 'example_user'@'%' IDENTIFIED WITH mysql_native_password BY 'Passwor
  GRANT ALL ON example_database.* TO 'example_user'@'%';
 ```
 •	Now exit the MySQL shell with
-              exit
+
+```
+exit
+```
 
 You can test if the new user has the proper permissions by logging in to the MySQL console again
-              mysql -u example_user -p
-              
+```
+mysql -u example_user -p
+```
+           
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 013](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/26ff153f-81b1-4b61-8336-c8cbd7bb9d0a)
  
 
 •	After logging in to the MySQL console, confirm that you have access to the example_database database
-                SHOW DATABASES;
+```
+SHOW DATABASES;
+```
                 
 ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 014](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a294606c-3774-4ccd-bbe8-54c9d8a95ee6)
 
- 
 
 Next, we’ll create a test table named todo_list. From the MySQL console, run the following statement
 
-           CREATE TABLE example_database.todo_list (item_id INT AUTO_INCREMENT, content VARCHAR(255), PRIMARY KEY(item_id));
+```
+CREATE TABLE example_database.todo_list (item_id INT AUTO_INCREMENT, content VARCHAR(255), PRIMARY KEY(item_id));
+```
+
 Insert a few rows of content in the test table. You might want to repeat the next command a few times, using different VALUES:
-           INSERT INTO example_database.todo_list (content) VALUES ("My first important item");
 
-
+```
+INSERT INTO example_database.todo_list (content) VALUES ("My first important item");
+```
 
 To confirm that the data was successfully saved to your table, run:
 
-              SELECT * FROM example_database.todo_list;
+```
+SELECT * FROM example_database.todo_list;
+```
+
 
 Output
 
@@ -296,9 +318,11 @@ Output
 
  
 
-
 •	You can exit the MySQL console after confirming valid data in your test table
-                 exit
+
+```
+exit
+```
 
 
 •	Now you can create a PHP script that will connect to MySQL and query for your content
@@ -307,28 +331,30 @@ Output
 
 •	Copy this content into your todo_list.php script:
 
-```
-                    <?php
-                    $user = "example_user";
-                    $password = "password";
-                    $database = "example_database";
-                    $table = "todo_list";
+```php
+<?php
+$user = "example_user";
+$password = "password";
+$database = "example_database";
+$table = "todo_list";
 
-                    try {
-                      $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
-                      echo "<h2>TODO</h2><ol>";
-                      foreach($db->query("SELECT content FROM $table") as $row) {
-                        echo "<li>" . $row['content'] . "</li>";
-                      }
-                      echo "</ol>";
-                    } catch (PDOException $e) {
-                        print "Error!: " . $e->getMessage() . "<br/>";
-                        die();
-                    }
+try {
+    $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
+    echo "<h2>TODO</h2><ol>";
+    foreach ($db->query("SELECT content FROM $table") as $row) {
+        echo "<li>" . $row['content'] . "</li>";
+    }
+    echo "</ol>";
+} catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . "<br/>";
+    die();
+}
 ```
 
 This PHP code connects to a MySQL database (example_database) on localhost using the provided username and password. It selects data from the todo_list table and displays it as a list of TODO items.
 If there are any errors during the database connection or query execution, it catches the exception and prints the error message.
+
+
 We can now access the page on our Web Browser
 ```
 http://<Public_domain_or_IP>/todo_list.php
