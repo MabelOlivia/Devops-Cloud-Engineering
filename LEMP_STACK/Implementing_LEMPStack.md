@@ -20,6 +20,9 @@ After creating the EC2 instance on AWS like we did on LAMP Stack we will SSH int
 ```bash
 sh -i TestKey.pem ubuntu@51.20.3.33
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 001](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8f3391ad-31ff-48b1-9a38-0e55dd9307fd)
+
+
 
  
 Installing NginX server
@@ -41,6 +44,7 @@ To verify that it was installed correctly, we will run the following command
 ```bash
 sudo systemctl status nginx
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 002](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/666d4500-5b25-44c8-8bd0-b098c7d73442)
  
 We have just launched our first server in the clouds!! 😊
 
@@ -57,17 +61,21 @@ or use
 
 curl http://127.0.0.1:80
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 003](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/911176f5-0d87-42b5-abe3-b362abc5d1d5)
 
  
 
 Let us test to see if our Nginx server can respond to requests on the internet
- 
+
+ ![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 004](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7cf38250-414a-42fc-908c-d891e0ec2472)
+
 
 One can accesss their EC2 instance IP using the following command 
 
 ```
 curl -s http://169.254.169.254/latest/meta-data/public-ipv4
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 005](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f7dfb743-50fe-4216-bd21-dc2ea2785436)
  
 
 Installing MySQL
@@ -82,7 +90,8 @@ To log in into the mysql console
 ```
 sudo mysql
 ```
- 
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 006](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8cabf5e9-3adb-4e3b-9bd8-ced77105ad25)
+
 To exit mysql
 
 ```
@@ -94,13 +103,17 @@ The security script comes pre-installed with mysql. This script removes some ins
 ```
 $ *sudo mysql_secure_installation*
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 007](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/1d07261e-a8a4-41bb-8222-6632d438be04)
 
 
 To Test whether I can log into mysql
 
 ```
 sudo mysql -p
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 008](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d81ab03c-a152-4c69-a2f6-012915956461)
  ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 009](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6576ce72-51d7-4625-912a-03c64ffd29cb)
+
 
 We have installed Nginx and MySQL. We will now install PHP just like we did in LAMP stack.
 
@@ -188,6 +201,7 @@ Check for any syntax error in the config file
 ```
 sudo nginx -t
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 010](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9fcc124c-17d1-4942-9437-0aa4a975ea65)
 
 
 Let us now disable default nginx host configured to listen on port 80
@@ -207,6 +221,7 @@ We will now create a index.html file to test our new server block
 ```
 sudo sh -c "echo 'Hello LEMP from hostname' \$(curl -s http://169.254.169.254/latest/meta-data/public-hostname) 'with public IP' \$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)" > /var/www/projectLEMP/index.html
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 011](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e60288ef-7551-4790-a750-b142ddc3ad2b)
 
 
 
@@ -223,6 +238,7 @@ PHP code to return info about server
 <?php
 phpinfo();
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 012](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d54eae86-ce1a-4f79-9151-a6721f41b4ce)
 
 
 RETRIEVING DATA FROM MYSQL DATABASE WITH PHP
@@ -251,10 +267,14 @@ CREATE USER 'example_user'@'%' IDENTIFIED WITH mysql_native_password BY 'Passwor
 
 You can test if the new user has the proper permissions by logging in to the MySQL console again
               mysql -u example_user -p
+              
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 013](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/26ff153f-81b1-4b61-8336-c8cbd7bb9d0a)
  
 
 •	After logging in to the MySQL console, confirm that you have access to the example_database database
                 SHOW DATABASES;
+                
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 014](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a294606c-3774-4ccd-bbe8-54c9d8a95ee6)
 
  
 
@@ -271,6 +291,8 @@ To confirm that the data was successfully saved to your table, run:
               SELECT * FROM example_database.todo_list;
 
 Output
+
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 015](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c984eef9-19a3-41f7-bc87-6d079a71f817)
 
  
 
@@ -311,6 +333,7 @@ We can now access the page on our Web Browser
 ```
 http://<Public_domain_or_IP>/todo_list.php
 ```
+![Aspose Words 58576ace-8cf8-4df5-9c91-16c3a3d78417 016](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c7425449-c5df-4e25-9799-678241a72453)
 
  
 
