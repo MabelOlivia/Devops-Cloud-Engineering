@@ -53,12 +53,16 @@ Verify the installation of Node:
 ```bash
 node -v
 ```
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 001](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c4ca4207-7e57-4693-9427-5ba9c77fb3a9)
+
 
 Verify the installation of npm:
 
 ```bash
 npm -v
 ```
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 002](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/1adef47a-e16b-437b-bb33-8dd8f7cb6eec)
+
 
 **Application Code Set-Up**
 
@@ -79,6 +83,9 @@ Initialize the project:
 ```bash
 npm init
 ```
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 003](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9b8b6969-6342-40eb-aa1d-eccef8a23df4)
+
+
 
 Create a file index.js:
 
@@ -136,6 +143,9 @@ Start the server:
 node index.js
 ```
 
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 004](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c24e3d1f-bf75-44e0-b472-f5db9316ed70)
+
+
 **OPEN PORT IN EC2 SECURITY GROUPS**
 
 Open port 5000 in your EC2 Security Groups.
@@ -147,6 +157,16 @@ Open up your browser and try to access your server’s Public IP or Public DNS n
 ```http
 http://<PublicIP-or-PublicDNS>:5000
 ```
+
+Quick reminder how to get your server’s Public IP and public DNS name:
+1.	You can find it in your AWS web console in EC2 details
+2.	Run curl -s http://169.254.169.254/latest/meta-data/public-ipv4 for Public IP address or curl -s http://169.254.169.254/latest/meta-data/public-hostname for Public DNS name.
+
+
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 005](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9010d49a-3993-4b8f-a96b-81596487144b)
+
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 006](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7cfac22c-3dc6-4bf2-8131-bf22578ce099)
+
 
 **CREATING ROUTES**
 
@@ -243,7 +263,8 @@ To integrate MongoDB with our application, we'll use Mongoose, a Node.js package
      touch todo.js
      ```
 
- 
+ ![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 007](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/cec50e81-b077-4d81-b61a-371f25432fad)
+
 
    - Open the `todo.js` file with a text editor:
 
@@ -326,14 +347,18 @@ Now, let's update the routes in the `api.js` file to use the new model:
 
 **MONGODB DATABASE**
 
-Now, with the models and routes set up, we're ready to integrate MongoDB into our application. Let me know if you need further explanation or assistance!
+Now, with the models and routes set up, we're ready to integrate MongoDB into our application. 
 
 MongoDB Database
-mLab provides MongoDB database as a service solution (DBaaS). MongoDB has two cloud database management system components: mLab and Atlas, Both were formerly cloud databases managed by MongoDB (MongoDB acquired mLab in 2018, with certain differences). In November, MongoDB merged the two cloud databases and as such, mLab.com redirects to the MongoDB Atlas website.
+mLab provides MongoDB database as a service solution (DBaaS). MongoDB has two cloud database management system components: mLab and Atlas, Both were formerly cloud databases managed by MongoDB. MongoDB merged the two cloud databases and as such, mLab.com redirects to the MongoDB Atlas website.
+
+
 1. Create a MongoDB database and collection inside mLab
 
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 008](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/14ae20ee-6e80-4bf3-9a6a-d7d8799a699b)
 
- 
+ ![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 009](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/fc3ffd5f-3d61-493b-8308-90b7491017d4)
+
 
 
 
@@ -344,11 +369,16 @@ touch .env && vim .env
 Add connection string below to access the database
 DB = ‘mongodb+srv://<username>:<password>@<network-address>/<dbname>?retryWrites=true&w=majority’
 
+![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 010](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2428e62a-826e-4bd1-926d-7dcc17e08e7a)
+
+
  
 3. Update the index.js to reflect the use of .env so that Node.js can connect to the database.
 vim index.js
 
 Delete existing content in the file, and update it with the entire code below:
+
+ ```
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -386,6 +416,7 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+ ```
  
 Using environment variables to store information is considered more secure and best practice to separate configuration and secret data from the application, instead of writing connection strings directly inside the index.js application file.
 4. Start your server using the command
@@ -799,6 +830,18 @@ At this point, the To-Do app is ready and fully functional with the functionalit
 •	deleting a task
 •	viewing all the tasks.
 The client can now be viewed in the browser
+
+<img width="856" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/79f442e8-8332-438f-b707-0bd47e9f2bea">
+
+Add some todos via the browser .
+
+<img width="759" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/870b90b1-ff29-4129-ac92-a72a925707a0">
+
+
+Check the Database 
+
+<img width="551" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8854862a-fdfa-4b8e-aad6-280441b4188e">
+
 
  
 
