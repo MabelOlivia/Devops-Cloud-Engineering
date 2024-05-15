@@ -14,6 +14,10 @@ Together, these technologies provide a full-stack JavaScript development environ
 
 
 ---
+<img width="932" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/770e32f7-574a-47e8-a32b-fee2da42a5c2">
+
+---
+
 
 **MERN STACK IMPLEMENTATION**
 
@@ -146,8 +150,6 @@ node index.js
 ![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 004](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c24e3d1f-bf75-44e0-b472-f5db9316ed70)
 
 
-**OPEN PORT IN EC2 SECURITY GROUPS**
-
 Open port 5000 in your EC2 Security Groups.
 
 **ACCESS THE SERVER**
@@ -167,6 +169,7 @@ Quick reminder how to get your server’s Public IP and public DNS name:
 
 ![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 006](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7cfac22c-3dc6-4bf2-8131-bf22578ce099)
 
+---
 
 **CREATING ROUTES**
 
@@ -263,7 +266,7 @@ To integrate MongoDB with our application, we'll use Mongoose, a Node.js package
      touch todo.js
      ```
 
- ![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 007](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/cec50e81-b077-4d81-b61a-371f25432fad)
+      ![Aspose Words a74d693a-7668-484f-a154-a3b635982d76 007](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/cec50e81-b077-4d81-b61a-371f25432fad)
 
 
    - Open the `todo.js` file with a text editor:
@@ -419,12 +422,19 @@ app.listen(port, () => {
  ```
  
 Using environment variables to store information is considered more secure and best practice to separate configuration and secret data from the application, instead of writing connection strings directly inside the index.js application file.
+
+
 4. Start your server using the command
+
+```
 node index.js
+```
 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/4736478a-a64f-405b-9947-7dfa2a0b497d)
 
-Testing Backend Code without Frontend using RESTful API
+---
+
+**Testing Backend Code without Frontend using RESTful API**
 
 We've completed the backend part of our To-Do application and configured a database. However, we're still missing the frontend UI. To achieve that, we need to write ReactJS code. During development, we need a way to test our code using RESTful API. Therefore, we'll use an API development client to facilitate testing.
 
@@ -439,27 +449,42 @@ The endpoint for this request is:
 ```
 http://<PublicIP-or-PublicDNS>:5000/api/todos
 ```
+### Open Postman and Set the header
 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a5c93f5f-a581-4757-a830-07dbb0e576f1)
 
- 
- 
+### Create POST requests to the API
 
- 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a7132e46-61f8-4d6e-8ead-dabcfc004cbe)
 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5894e0a7-d259-40e9-8575-794fe6f8561a)
 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5a6fd761-9a3e-4e0c-808b-84d41e61a085)
 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/caa9aacf-c1a1-4b7f-951f-806a97e17a5d)
  
- 
+### Check Database Collections
 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2b18b70c-e5e6-402c-8fe3-2bec7188f491)
+
+ ### GET requests to the API
+
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5c935b80-d3ef-4ab3-96a4-d6a7b8d89600)
+
+ ### DELETE requests to the API
+
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9059b21b-815f-46f6-ac3d-68b037dd0ab3)
+
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2d1cb45c-ba8b-4583-8f62-9469ca612d30)
+
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8bbad752-5ab5-49d2-b148-7fe0a0213d05)
+
+
 
 
 Now that we've completed building the backend and API functionalities, it's time to develop a user interface for our web application to interact with the backend via API calls. To kick off the frontend development of the Todo app, we'll utilize the `create-react-app` command to set up the initial structure of our application.
-Frontend Creation
+
+## Frontend Creation
 
 1. **Create React App**:
    - Use `create-react-app` to initialize a new React project.
@@ -467,7 +492,8 @@ Frontend Creation
      ```bash
      npx create-react-app client
      ```
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b8bc5f51-2bd7-49ae-8165-0b282f15839a)
+
 
 2. **Install Dependencies**:
    - Install `concurrently` to run multiple commands simultaneously.
@@ -503,7 +529,8 @@ Frontend Creation
      "proxy": "http://localhost:5000"
      ```
 
- 
+ ![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3410beca-0970-43cf-8879-5227b0b135f0)
+
 
 5. **Run the Application**:
    - Start both the server and the React app concurrently using the `npm run dev` command.
@@ -511,11 +538,12 @@ Frontend Creation
      ```bash
      npm run dev
      ```
+![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dcef3393-57ef-4111-bd35-934e31dc32e4)
+
  
 Remember to ensure that your EC2 instance's security group allows inbound traffic on port 3000 to access the application from the internet. This step is crucial for deploying your application and making it accessible to users.
 
 Creating your React Components
-Here's the step-by-step guide formatted:
 
 1. **Navigate to Client Directory and Create Components Directory:**
    ```bash
@@ -578,12 +606,15 @@ class Input extends Component {
 
 export default Input;
 ```
-4. In oder to make use of Axios, which is a Promise based HTTP client for the browser and node.js, you need to cd into your client from your terminal and run yarn add axios or npm install axios.
+4. To make use of Axios, which is a Promise based HTTP client for the browser and node.js, you need to cd into your client from your terminal and run yarn add axios or npm install axios.
 Move to the client folder
-cd ../..
+cd ..
 
-Install Axios
+*Install Axios*
+
+ ```
 npm install axios
+```
 
 5. **Open ListTodo.js and Add Component Code:**
    ```bash
@@ -823,13 +854,22 @@ code {
    ```
 These steps guide you through creating React components, adding functionality, and styling the Todo application. After completing these steps, you can run the application using `npm run dev`.
 
+![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c59022d2-5e0b-4917-b494-6d5b010b46aa)
+
+
  
 
 At this point, the To-Do app is ready and fully functional with the functionality discussed earlier: 
-•	Creating a task, 
+<br>
+•	Creating a task
+<br>
 •	deleting a task
+<br>
 •	viewing all the tasks.
+<br>
 The client can now be viewed in the browser
+<br>
+<br>
 
 <img width="856" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/79f442e8-8332-438f-b707-0bd47e9f2bea">
 
@@ -842,6 +882,8 @@ Check the Database
 
 <img width="551" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8854862a-fdfa-4b8e-aad6-280441b4188e">
 
+<br>
 
+# AND WE ARE FINALLY DONE 🎉🎉🎉 
  
 
