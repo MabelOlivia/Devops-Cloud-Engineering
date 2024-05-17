@@ -430,5 +430,13 @@ Great news! 😊😊 Our server is now operational and can be accessed via port 
 
 Furthermore, the Book Register web application is now accessible from the internet. Users can visit it using either the Public IP address or the Public DNS name in their browser. This opens up your application to a wider audience and enhances its usability.
 
+<img width="755" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/db7f22cb-1b9e-48b8-a53f-fd04ba78a8ea">
+
+<img width="608" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/745f528c-8519-40e0-b21f-2b8485048c85">
+
+<img width="544" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/09d27413-338c-42a7-b46c-bcf1c0978b44">
+
+
+
 
 
