@@ -132,13 +132,13 @@ app.listen(app.get('port'), () => {
 ## Step 3: Install Express and set up routes to the server
 We'll install Express to manage the transfer of book information to and from our MongoDB database. To structure our application data, we'll rely on the Mongoose package, which provides a straightforward schema-based solution. With Mongoose, we'll define a schema that fits our book registry, ensuring that our data is stored in an organized manner within the database.
 
-1. Install express and mongoose
+1. *Install express and mongoose*
 
 ```
 sudo npm install express mongoose
 ```
 
-2. In Books folder we will create a folder named ‘apps’
+2. *In Books folder we will create a folder named apps*
 
 ```
 mkdir apps && cd apps
@@ -232,37 +232,203 @@ module.exports = function(app) {
 };
 ```
 
-3. In the apps folder create a folder named models
+3. *In the apps folder create a folder named models*
 
 ```
 mkdir models && cd models
 ```
 
-4. In models create a file named book.js
+4. *In models create a file named book.js*
 
 ```
 vi book.js
 ```
 
+Paste the code below into book.js
 
-﻿```
+```
 var mongoose = require('mongoose');
-var dbHost =
-'mongodb://localhost:27017/test';
-mongoose.connect (dbHost);
+var dbHost = 'mongodb://localhost:27017/test';
+mongoose.connect(dbHost);
 mongoose.connection;
 mongoose.set('debug', true);
-var bookSchema
-name: String,
-=
-mongoose.Schema( {
-isbn: {type: String, index: true},
-author: String,
-pages: Number
+var bookSchema = mongoose.Schema({
+    isbn: { type: String, index: true },
+    author: String,
+    pages: Number
 });
-var Book =
-mongoose.model ('Book', bookSchema);
-module.exports
-=
-mongoose.model ('Book', bookSchema);
+var Book = mongoose.model('Book', bookSchema);
+module.exports = mongoose.model('Book', bookSchema);
 ```
+
+## Step 4: Access the routes with AngularJS
+We will use AngularJS to connect the web page with Express and perform actions on the book register.
+
+1. CD back to Books and create a folder named public
+```
+mkdir public && cd public
+```
+
+Add a file named script.js into public folder
+```
+vi script.js
+```
+Copy and paste the code below (controller configuration defined) into the script.js file.
+
+```
+var app = angular.module('myApp', []);
+
+app.controller('myCtrl', function($scope, $http) {
+  // Get all books
+  function getAllBooks() {
+    $http({
+      method: 'GET',
+      url: '/book'
+    }).then(function successCallback(response) {
+      $scope.books = response.data;
+    }, function errorCallback(response) {
+      console.log('Error: ' + response.data);
+    });
+  }
+
+  // Initial load of books
+  getAllBooks();
+
+  // Add a new book
+  $scope.add_book = function() {
+    var body = {
+      name: $scope.Name,
+      isbn: $scope.Isbn,
+      author: $scope.Author,
+      pages: $scope.Pages
+    };
+    $http({
+      method: 'POST',
+      url: '/book',
+      data: body
+    }).then(function successCallback(response) {
+      console.log(response.data);
+      getAllBooks();  // Refresh the book list
+      // Clear the input fields
+      $scope.Name = '';
+      $scope.Isbn = '';
+      $scope.Author = '';
+      $scope.Pages = '';
+    }, function errorCallback(response) {
+      console.log('Error: ' + response.data);
+    });
+  };
+
+  // Update a book
+  $scope.update_book = function(book) {
+    var body = {
+      name: book.name,
+      isbn: book.isbn,
+      author: book.author,
+      pages: book.pages
+    };
+    $http({
+      method: 'PUT',
+      url: '/book/' + book.isbn,
+      data: body
+    }).then(function successCallback(response) {
+      console.log(response.data);
+      getAllBooks();  // Refresh the book list
+    }, function errorCallback(response) {
+      console.log('Error: ' + response.data);
+    });
+  };
+
+  // Delete a book
+  $scope.delete_book = function(isbn) {
+    $http({
+      method: 'DELETE',
+      url: '/book/' + isbn
+    }).then(function successCallback(response) {
+      console.log(response.data);
+      getAllBooks();  // Refresh the book list
+    }, function errorCallback(response) {
+      console.log('Error: ' + response.data);
+    });
+  };
+});
+```
+
+2. In public folder, create a file named index.html
+```
+vi index.html
+```
+
+Copy and paste the code below into index.html file
+
+```
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="myCtrl">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="script.js"></script>
+  <style>
+    /* Add your custom CSS styles here */
+  </style>
+</head>
+<body>
+  <div>
+    <table>
+      <tr>
+        <td>Name:</td>
+        <td><input type="text" ng-model="Name"></td>
+      </tr>
+      <tr>
+        <td>Isbn:</td>
+        <td><input type="text" ng-model="Isbn"></td>
+      </tr>
+      <tr>
+        <td>Author:</td>
+        <td><input type="text" ng-model="Author"></td>
+      </tr>
+      <tr>
+        <td>Pages:</td>
+        <td><input type="number" ng-model="Pages"></td>
+      </tr>
+    </table>
+    <button ng-click="add_book()">Add</button>
+    <div ng-if="successMessage">{{ successMessage }}</div>
+    <div ng-if="errorMessage">{{ errorMessage }}</div>
+  </div>
+  <hr>
+  <div>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Isbn</th>
+        <th>Author</th>
+        <th>Page</th>
+        <th>Action</th>
+      </tr>
+      <tr ng-repeat="book in books">
+        <td>{{ book.name }}</td>
+        <td>{{ book.isbn }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.pages }}</td>
+        <td><button ng-click="del_book(book)">Delete</button></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
+```
+
+3. CD back to Books and start the server
+```
+node server.js
+```
+
+<img width="913" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/86a2e06c-54a8-432d-9406-af9e391f8184">
+
+
+The server is now up and running, Connection to it is via port 3300. A separate Putty or SSH console to test what curl command returns locally can be launched.
+
+The Book Register web application can now be accessed from the internet with a browser using the Public IP address or Public DNS name.
+
+
+
