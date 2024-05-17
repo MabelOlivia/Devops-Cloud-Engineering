@@ -13,9 +13,9 @@ The MEAN stack is a popular technology stack used for building dynamic web appli
 Together, these technologies form a full-stack solution for developing modern web applications, where MongoDB handles data storage, Express.js manages server-side logic and routing, Angular (or AngularJS) handles client-side interactions and user interfaces, and Node.js provides the runtime environment for running JavaScript code on the server. This stack is known for its simplicity, flexibility, and ability to handle real-time applications efficiently.
 
 
-**MEAN STACK IMPLEMENTATION**
+## MEAN STACK IMPLEMENTATION
 
-PREREQUISITES
+*PREREQUISITES*
 
 1. Have a running EC2 instance on AWS.
 2. This time we will connect to our EC2 instance using the AWS CLI
@@ -104,29 +104,21 @@ vi server.js
 Copy and paste the web server code below into the server.js file.
 
 ```
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose'); // Make sure mongoose is installed and required
-const path = require('path'); // To handle static file serving
-const app = express();
+var express = require('express');
+var bodyParser = require('body-parser');
+var app = express();
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// Middleware
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes
 require('./apps/routes')(app);
 
-// Start the server
 app.set('port', 3300);
-app.listen(app.get('port'), () => {
-  console.log('Server up: http://localhost:' + app.get('port'));
+
+app.listen(app.get('port'), function() {
+    console.log('Server up: http://localhost:' + app.get('port'));
 });
+
 ```
 
 ## Step 3: Install Express and set up routes to the server
@@ -264,7 +256,7 @@ module.exports = mongoose.model('Book', bookSchema);
 ## Step 4: Access the routes with AngularJS
 We will use AngularJS to connect the web page with Express and perform actions on the book register.
 
-1. CD back to Books and create a folder named public
+1. *CD back to Books and create a folder named public*
 ```
 mkdir public && cd public
 ```
@@ -354,12 +346,12 @@ app.controller('myCtrl', function($scope, $http) {
 });
 ```
 
-2. In public folder, create a file named index.html
+2. *In public folder, create a file named index.html*
 ```
 vi index.html
 ```
 
-Copy and paste the code below into index.html file
+Paste the code below into index.html file
 
 ```
 <!DOCTYPE html>
@@ -418,7 +410,7 @@ Copy and paste the code below into index.html file
 </html>
 ```
 
-3. CD back to Books and start the server
+3. *CD back to Books and start the server*
 ```
 node server.js
 ```
