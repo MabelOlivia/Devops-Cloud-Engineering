@@ -426,9 +426,9 @@ node server.js
 <img width="913" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/86a2e06c-54a8-432d-9406-af9e391f8184">
 
 
-The server is now up and running, Connection to it is via port 3300. A separate Putty or SSH console to test what curl command returns locally can be launched.
+Great news! 😊😊 Our server is now operational and can be accessed via port 3300. 
 
-The Book Register web application can now be accessed from the internet with a browser using the Public IP address or Public DNS name.
+Furthermore, the Book Register web application is now accessible from the internet. Users can visit it using either the Public IP address or the Public DNS name in their browser. This opens up your application to a wider audience and enhances its usability.
 
 
 
