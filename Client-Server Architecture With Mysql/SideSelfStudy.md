@@ -117,4 +117,3 @@
 - **Normalization**: Organizing data into multiple tables to minimize redundancy and improve data integrity.
 - **SQL Joins**: Combining data from multiple tables using JOIN operations like INNER JOIN, LEFT JOIN, and RIGHT JOIN.
 
-Now with the explanations and code snippets combined, you have a comprehensive understanding of SQL basics and how to execute each command.
