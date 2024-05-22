@@ -2,7 +2,7 @@
  
 To demonstrate a basic client-server using MYSQL RDBMS:
 
-**Step 1:**
+## Step 1:
 
 Create and configure two linux-based virtual servers (EC2 instance in AWS)
 
@@ -11,7 +11,7 @@ Create and configure two linux-based virtual servers (EC2 instance in AWS)
 
 <img width="728" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/322cdcfd-f200-46e6-8d5f-576bc4f82bf3">
 
-**Step 2:**
+## Step 2:
 
 On mysql server Linux Server, install MySQL Server software
 
@@ -35,7 +35,7 @@ sudo apt install mysql-server -y
 sudo systemctl enable mysql
 ```
 
-**Step 3:**
+## Step 3:
 
 On mysql client Linux Server install MySQL Client software.
 
@@ -51,7 +51,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install mysql-client -y
 ```
 
-**Step 4:**
+## Step 4:
 
 Use mysql server's local IP address to connect from mysql client.
 
@@ -160,4 +160,48 @@ show databases;
 
   <img width="382" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0b7057ff-3800-4e9a-b46d-fadb45e35df3">
 
+<br>
+<br>
 
+### Create tables, insert records, and select records in our `test_db` database.
+
+*Step-by-Step Instructions*
+
+1. **Switch to `test_db` Database:**
+
+   ```sql
+   USE test_db;
+   ```
+
+2. **Create a Table:**
+
+   ```sql
+   CREATE TABLE employees (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       name VARCHAR(100),
+       position VARCHAR(100),
+       salary DECIMAL(10, 2)
+   );
+   ```
+
+3. **Insert Records into the Table:**
+
+   ```sql
+   INSERT INTO employees (name, position, salary) VALUES
+   ('John Doe', 'Manager', 75000.00),
+   ('Jane Smith', 'Developer', 60000.00),
+   ('Emily Johnson', 'Designer', 55000.00);
+   ```
+
+5. **Select Records from the Table:**
+
+   ```sql
+   SELECT * FROM employees;
+   ```
+
+<img width="444" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/30e2311a-ad3d-4f2d-913e-ff168d3ab28e"> <br>
+
+
+<br>
+
+***OUR PROJECT IS NOW COMPLETE 🎉🎉***
