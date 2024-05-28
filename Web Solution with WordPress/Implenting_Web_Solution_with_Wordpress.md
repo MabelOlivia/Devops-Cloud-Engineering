@@ -1,5 +1,6 @@
 # Web Solution with Wordpress
 
+## Part One
 
 ### Step 1: Launch a RedHat EC2 Instance
 1. Go to the AWS Management Console and navigate to the EC2 dashboard.
@@ -253,6 +254,160 @@ To test the configuration, reload the systemd daemon, and verify the setup, foll
 
    <img width="507" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b1382993-a9b4-47a5-8f25-f1ad6ea428c9">
 
+## Part Two
+
+### Prepare the Database Server
+
+Launch a second RedHat EC2 instance that will have a role - DB Server. Repeat the same steps as for the Web Server, but instead of apps-lv, create dv-lv and mount it to /db directory.
+
+Sure, here's a detailed breakdown of the steps with code examples:
+
+1. **Launch EC2 Instance**:
+   - Launch a RedHat EC2 instance using the AWS Management Console or AWS CLI. Make sure to choose the appropriate instance type, security groups, and IAM role.
+
+2. **Attach EBS Volumes**:
+   - Create EBS volumes using the AWS Management Console or AWS CLI.
+   - Attach the created EBS volumes to the DB Server EC2 instance. Adjust the volume size and count based on your requirements.
+
+3. **SSH into the DB Server EC2 Instance**:
+   ```bash
+   ssh -i your_key.pem ec2-user@your_db_server_ip
+   ```
+
+4. **Partition and Format the Disk**:
+   - If necessary, partition the attached EBS volume(s) using `gdisk`, `parted`, or `fdisk`.
+
+  To create a single partition on each of the three disks using the `gdisk` utility, follow these steps:
+
+   **Identify the Disks**
+   Before partitioning the disks, identify the disks you want to partition. You can list the available disks using the `lsblk` command.
+
+   ```bash
+   lsblk
+   ```
+
+   Note down the device names of the disks you want to partition, such as `/dev/nvme1n1`, `/dev/nvme2n1`, and `/dev/nvme3n1`.
+
+   **Run gdisk**:
+   Start the `gdisk` utility for each disk you want to partition.
+
+   ```bash
+   sudo gdisk /dev/nvme1n1
+   ```
+
+   Replace `/dev/nvme1n1` with the appropriate device name for each disk.
+
+   **Create a New Partition**:
+   Within `gdisk`, create a new partition.
+
+   - Press `n` and then `Enter` to create a new partition.
+   - Choose the default partition number (usually 1) and press `Enter`.
+   - Choose the default starting sector and press `Enter`.
+   - Choose the default ending sector or specify the size of the partition as needed.
+   - Set the partition type. If you're using the entire disk, you can typically use the default partition type (Linux filesystem).
+   - Press `w` to write the changes to the disk and exit.
+
+  **Repeat for Other Disks**:
+   Repeat the above steps for each of the remaining disks (`/dev/nvme2n1` and `/dev/nvme3n1`).
+
+ **Verify**:
+   After creating the partitions, you can verify them using the `lsblk` command again. You should see the newly created partitions listed for each disk.
+
+<img width="332" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/17ed3ab5-2a49-4af1-aadd-7e85bba4fa4b">
 
 
+5. **Install lvm package**
 
+   ```
+   sudo yum install lvm2 -y
+   ```
+
+   Use pvcreate utility to mark each of the 3 dicks as physical volumes (PVs) to be used by LVM. Also, use vgcreate utility to add all 3 PVs to a volume group (VG). Name the VG database-vg. Verify that each of the volumes and the VG have been created successfully.
+
+```
+sudo pvcreate database-vg /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
+sudo pvs
+```
+<img width="318" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/1a37401a-41b0-4fb4-89e0-dadaf70f91b5">
+
+```
+sudo vgcreate database-vg /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
+sudo vgs
+```
+
+<img width="590" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/94e49e20-4c67-48e2-bc50-1cc8dc32e807">
+
+
+6. **Create Logical Volume (LV)**:
+   Use lvcreate utility to create a logical volume, db-lv (Use 20G of the PV size since it is the only LV to be created). Verify that the logical volumes have been created successfully.
+
+   ```
+   sudo lvcreate -n db-lv -L 20G database-vg
+   
+   sudo lvs
+   ```
+   <img width="650" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f40f0953-608f-4193-9336-7978e1796c26">
+
+
+7. **Mount the Logical Volume**:
+   To format the logical volume `db-lv` with the ext4 filesystem and then mount it to the `/db` directory, follow these steps:
+
+ **Format the Logical Volume**:
+   Use the `mkfs.ext4` command to format the logical volume `db-lv` with the ext4 filesystem.
+
+   ```bash
+   sudo mkfs.ext4 /dev/database-vg/db-lv
+   ```
+
+   This command formats the logical volume `db-lv` with the ext4 filesystem, making it ready for use.
+
+ **Mount the Logical Volume**:
+   Once the logical volume is formatted, you can mount it to the `/db` directory using the `mount` command.
+
+   ```bash
+   sudo mount /dev/database-vg/db-lv /db
+   ```
+
+   This command mounts the logical volume `db-lv` to the `/db` directory, allowing you to access it as a filesystem.
+
+After executing these commands, the logical volume `db-lv` will be formatted with the ext4 filesystem and mounted to the `/db` directory. You can now use the `/db` directory to store data for your database.
+
+8. **Update `/etc/fstab`**:
+   - Obtain the UUID of the `db-lv` logical volume using `blkid`.
+   - Update the `/etc/fstab` file with an entry for the `db-lv` logical volume using its UUID and mount point (`/db`).
+       
+     ```bash
+     # Mount point for database logical volume
+      UUID=0c62841a-15a6-4dec-8745-16f892c70af1  /db  ext4  defaults  0  0
+     ```
+     
+   <img width="610" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/75366b00-edf7-4949-8c8c-12fc02d0ea33">
+
+
+9. **Test Configuration**:
+    - Run `sudo mount -a` to test the configuration.
+    - Run `sudo systemctl daemon-reload` to reload the systemd daemon.
+    - Use `df -h` to verify that the `db-lv` logical volume is mounted to the `/db` directory.
+
+      ```
+      sudo mount -a   # Test the configuration
+
+      sudo systemctl daemon-reload
+      
+      df -h   # Verifies the setup
+      ```
+   <img width="429" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/629beb8d-5fea-449b-b10f-92b5e01bfa39">
+
+
+## Part Three - Install WordPress on the Web Server EC2
+
+1. Update the repository
+```
+sudo yum -y update
+```
+
+2. Install wget, Apache and it's dependencies
+```
+sudo yum install wget httpd php-fpm php-json
+
+```
