@@ -1,5 +1,32 @@
 # Web Solution with Wordpress
 
+**Project Overview:**
+
+In this project, you are tasked with preparing the storage infrastructure on two Linux servers and implementing a basic web solution using WordPress. WordPress is a free and open-source content management system written in PHP and paired with MySQL or MariaDB as its backend Relational Database Management System (RDBMS).
+
+**Project Structure:**
+
+This project is divided into two main parts:
+
+1. **Configure Storage Subsystem:**
+   - Objective: Set up the storage infrastructure for both Web and Database servers based on the Linux OS, focusing on working with disks, partitions, and volumes in Linux.
+
+2. **Install WordPress and Connect to MySQL Database:**
+   - Objective: Deploy WordPress on the Web server and connect it to a remote MySQL database server. This part of the project will deploy the Web and Database tiers of the web solution.
+
+**Three-tier Architecture:**
+
+Web or mobile solutions are commonly implemented using the Three-tier Architecture, which comprises three separate layers:
+
+- **Presentation Layer (PL):**
+  - This layer represents the user interface, such as the client server or browser on your laptop.
+
+- **Business Layer (BL):**
+  - This layer consists of the backend program that implements business logic, typically hosted on an application or web server.
+
+- **Data Access or Management Layer (DAL):**
+  - This layer handles computer data storage and data access, usually hosted on a database server or file system server, such as an FTP server or NFS server.
+
 ## Part One
 
 ### Step 1: Launch a RedHat EC2 Instance
@@ -414,3 +441,203 @@ sudo yum -y update
 sudo yum install wget httpd php-fpm php-json
 
 ```
+3. Start Apache
+
+   ```
+   sudo systemctl enable httpd
+
+   sudo systemctl status httpd
+   ```
+   
+   ```
+   sudo systemctl status httpd
+   ```
+
+   <img width="629" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3a2a6c48-77ee-4d01-9620-f2bbaef47ccb">
+
+4. ﻿To install PHP and it's dependencies
+
+   The provided commands are for installing PHP and its dependencies on a Red Hat Enterprise Linux (RHEL) 8-based system using the Remi repository, which provides updated versions of PHP.
+
+ **Install EPEL Repository**:
+   This command installs the Extra Packages for Enterprise Linux (EPEL) repository, which provides additional packages not included in the default RHEL repositories.
+
+   ```bash
+   sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+   ```
+
+ **Install YUM Utilities and Remi Repository**:
+   These commands install the YUM utilities (`yum-utils`) and the Remi repository, which contains updated versions of PHP packages.
+
+   ```bash
+   sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+   ```
+
+ **Reset PHP Module**:
+   This command resets the PHP module list to its default state.
+
+   ```bash
+   sudo yum module reset php
+   ```
+
+ **Enable PHP Module**:
+   This command enables the PHP module from the Remi repository. It specifically enables PHP version 7.4.
+
+   ```bash
+   sudo yum module enable php:remi-7.4
+   ```
+
+ **Install PHP and Additional Modules**:
+   This command installs PHP along with some common PHP extensions like opcache, gd, curl, and mysqlnd.
+
+   ```bash
+   sudo yum install php php-opcache php-gd php-curl php-mysqlnd
+   ```
+
+ **Start and Enable PHP-FPM**:
+   This command starts the PHP-FPM service (PHP FastCGI Process Manager) and enables it to start automatically at boot.
+
+   ```bash
+   sudo systemctl start php-fpm
+   sudo systemctl enable php-fpm
+   ```
+
+ **Set SELinux Boolean**:
+   This command sets the SELinux boolean `httpd_execmem` to `1`. This is necessary to allow the Apache HTTP server to execute scripts loaded into memory.
+
+   ```bash
+   sudo setsebool -P httpd_execmem 1
+   ```
+
+   <img width="427" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a6b10a77-eb19-478e-9dcd-988dc5aaa56b">
+
+   Restart Apache web server for PHP to work with Apache web server.
+
+   ```
+   sudo systemctl restart httpd
+   ```
+   <img width="686" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/4aed4c43-ab77-470e-92f5-be1be29ee905">
+
+Test to see the default Apache page on a browser 
+
+   <img width="744" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a3064ed9-2e18-4683-b50b-676e4a788825">
+
+
+### Download WordPress and Copy Files
+**Download WordPress**: This command downloads the latest version of WordPress.
+```bash
+sudo wget http://wordpress.org/latest.tar.gz
+```
+
+**Extract WordPress**: This command extracts the downloaded WordPress archive.
+```bash
+sudo tar xzvf latest.tar.gz
+```
+
+**Remove Archive**: This command removes the downloaded WordPress archive file.
+```bash
+sudo rm -rf latest.tar.gz
+```
+
+**Copy Configuration Sample**: This command copies the sample configuration file to create the actual configuration file for WordPress.
+```bash
+cp wordpress/wp-config-sample.php wordpress/wp-config.php
+```
+
+**Copy WordPress Files**: This command copies the WordPress files to the appropriate directory (`/var/www/html/`).
+```bash
+cp -R wordpress /var/www/html/
+```
+
+### Configure SELinux Policies
+**Change Ownership**: This command changes the ownership of the WordPress directory and its contents to the Apache user and group. This is necessary for Apache to have proper access to the files.
+
+```bash
+sudo chown -R apache:apache /var/www/html/wordpress
+```
+
+**Set SELinux Context**: This command sets the SELinux context of the WordPress directory to allow Apache to read and write to it. This is important for security and to prevent SELinux-related issues.
+```bash
+sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
+```
+
+**Set SELinux Boolean**: This command sets the SELinux boolean `httpd_can_network_connect` to 1, allowing Apache to make network connections. This might be necessary if WordPress needs to make external HTTP requests, such as for updates or plugins that communicate with external servers.
+```bash
+sudo setsebool -P httpd_can_network_connect 1
+```
+
+## Part Four
+
+### Install MySQL on DB Server EC2
+
+Update the EC2
+```
+sudo yum update -y
+```
+
+Install MySQL Server
+```
+sudo yum install mysql-server -y
+```
+
+Verify that the service is up and running. If it is not running, restart the service and enable it so it will be running even after reboot.
+
+```
+sudo systemctl start mysqld
+sudo systemctl enable mysqld
+sudo systemctl status mysqld
+```
+
+   <img width="739" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d3801222-e37e-4d13-93a2-a75a1586cbd9">
+
+### Configure DB to work with WordPress
+
+Run mysql secure script
+
+```
+sudo mysql_secure_installation
+```
+
+```
+sudo mysql -u root -p
+
+CREATE DATABASE wordpress;
+CREATE USER 'user'@'172.31.1.3' IDENTIFIED WITH mysql_native_password BY 'Password';
+GRANT ALL PRIVILEGES ON wordpress.* TO 'user'@'172.31.1.3' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+show databases;
+exit
+
+```
+
+<img width="512" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6c03b28c-a578-4cd0-bc43-00da15f6f5c7">
+
+### Configure WordPress to connect to remote database
+
+Open MySQL port 3306 on the DB Server EC2.
+For extra security, access to the DB Server is allowed only from the Web Server IP address. In the inbound rule, /32 is configured as source.
+
+<img width="676" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d368bc27-ca6b-4c97-8bd5-3c43f96f4176">
+
+
+### Install mysql client on the Web Server EC2.
+
+WordPress has its own database, therefore it needs a database server to store it's information such as: Username, Email, Passwords, First name and Last name of the users on the wordpress website on a database.
+
+```
+sudo yum install mysql-server
+ sudo mysql -u admin -p -h <DB-Server-Private-IP-address>
+```
+
+Try to access from your browser the link to your WordPress http://<Web-Server-Public-IP-Address>/wordpress/.
+
+<img width="631" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2fc35c98-ca95-414f-b136-7710217c545b">
+
+<img width="634" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dd1a1b92-5b4e-44b2-b981-f1650698d814">
+
+
+Anddd!! 🎉
+
+<img width="301" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c2eddbde-58d9-40fb-8a55-4eb414146f4b">
+
+
