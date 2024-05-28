@@ -399,8 +399,6 @@ After executing these commands, the logical volume `db-lv` will be formatted wit
       
    <img width="429" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/629beb8d-5fea-449b-b10f-92b5e01bfa39">
 
-![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7cdfd617-f04c-4820-b121-1c09b825be19)
-
 
 ## Part Three 
 
