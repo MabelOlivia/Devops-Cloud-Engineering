@@ -2,7 +2,7 @@
 
 **Project Overview:**
 
-In this project, you are tasked with preparing the storage infrastructure on two Linux servers and implementing a basic web solution using WordPress. WordPress is a free and open-source content management system written in PHP and paired with MySQL or MariaDB as its backend Relational Database Management System (RDBMS).
+In this project, we were tasked with preparing the storage infrastructure on two Linux servers and implementing a basic web solution using WordPress. WordPress is a free and open-source content management system written in PHP and paired with MySQL or MariaDB as its backend Relational Database Management System (RDBMS).
 
 **Project Structure:**
 
