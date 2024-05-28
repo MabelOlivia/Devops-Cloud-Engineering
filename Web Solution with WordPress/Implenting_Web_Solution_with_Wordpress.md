@@ -152,5 +152,107 @@ lsblk
 
 <img width="370" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/35c46f0a-42d6-4968-892c-6f4dc5d0b51b">
 
+### Step 11: Use mkfs.ext4 to format the logical volumes with ext4 filesystem
+
+```
+sudo mkfs.ext4 /dev/webdata-vg/apps-lv
+
+sudo mkfs.ext4 /dev/webdata-vg/logs-lv
+```
+
+### Step 12 
+
+To create the directories `/var/www/html` to store website files and `/home/recovery/logs` to store backup log data, and then mount the `/var/www/html` directory on the `apps-lv` logical volume, you can follow these steps:
+
+#### Step A: Create Directories
+
+1. **Create `/var/www/html` directory**:
+   ```bash
+   sudo mkdir -p /var/www/html
+   ```
+
+2. **Create `/home/recovery/logs` directory**:
+   ```bash
+   sudo mkdir -p /home/recovery/logs
+   ```
+
+#### Step B: Mount `apps-lv` on `/var/www/html`
+
+1. **Mount the `apps-lv` logical volume on `/var/www/html`**:
+   ```bash
+   sudo mount /dev/webdata-vg/apps-lv /var/www/html
+   ```
+
+#### Step C: Verify Mount
+
+After mounting, you can verify that the mount was successful by checking the output of the `df -h` command or inspecting the `/etc/fstab` file.
+
+```bash
+# Verify mount
+df -h
+```
+
+### Output Verification
+
+After running `df -h`, you should see `/dev/webdata-vg/apps-lv` mounted on `/var/www/html`:
+
+<img width="416" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a350771b-5d8e-48d6-b0dd-127e0ac0313b">
+
+### Step 13
+
+Before mounting the filesystem, it's crucial to perform the backup to ensure data integrity. You can use the `rsync` utility to synchronize the contents of the `/var/log` directory to the `/home/recovery/logs` directory.
+
+```bash
+sudo rsync -av /var/log/ /home/recovery/logs
+```
+
+To mount the `/var/log` directory on the `logs-lv` logical volume, you can use the following command:
+
+```bash
+sudo mount /dev/webdata-vg/logs-lv /var/log
+```
+
+To restore the backed-up log files from `/home/recovery/logs` back into the `/var/log` directory, you can use the `rsync` command again. Here's the correct command:
+
+```bash
+sudo rsync -av /home/recovery/logs/ /var/log
+```
+
+Update /etc/fstab file so that the mount configuration will persist after restart of the server
+
+Get the UUID of the device and Update the /etc/fstab file with the format shown inside the file using the UUID. Remember to remove the leading and ending quotes.
+```
+sudo blkid   # To fetch the UUID
+
+sudo vi /etc/fstab
+```
+<img width="565" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/ae45b0ef-015e-4dc1-9bc2-e3b3eb3726cc">
+
+
+### Step 14
+
+To test the configuration, reload the systemd daemon, and verify the setup, follow these steps:
+
+1. **Test the Configuration**:
+   ```bash
+   sudo mount -a
+   ```
+   This command mounts all filesystems specified in the `/etc/fstab` file, including the newly added mounts for the `logs-lv` and `apps-lv` logical volumes.
+
+2. **Reload the systemd Daemon**:
+   ```bash
+   sudo systemctl daemon-reload
+   ```
+   This command reloads the systemd manager configuration. This is necessary after making changes to unit files or other systemd configuration files.
+
+3. **Verify the Setup**:
+   ```bash
+   df -h
+   ```
+   This command displays information about all mounted filesystems. You can use it to verify that the mounts for `/var/log` and `/var/www/html` are present and have the expected sizes.
+
+   <img width="507" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b1382993-a9b4-47a5-8f25-f1ad6ea428c9">
+
+
 
 
