@@ -450,7 +450,10 @@ INSERT INTO users(id, username, password, email, user_type, status) VALUES (2, '
 
 <img width="943" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5f959338-8f3d-4da2-9031-e32a82815b6f">
 
+<img width="857" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/724aa5ed-5f51-4c9a-bf12-d9d4c4cd068d">
 
 #### *Conclusion*
 
 We have successfully implemented and deployed a DevOps tooling website solution that makes access to DevOps tools within a corporate infrastructure easily accessible. This comprises multiple web servers sharing a common database and also accessing the same files using Network File System (NFS) as shared file storage.
+
+🎉🎉🎉🎉🎉
