@@ -296,3 +296,20 @@ exit;
 Now, our MySQL database server is configured with a database named `tooling`, a user named `webaccess`, and the appropriate permissions for the web servers' subnet CIDR.
 
 <img width="493" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/216d2b72-e890-4ee3-99ac-98a19ec04ed8">
+
+Set Bind Address and restart MySQL
+```
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+```
+
+```
+sudo systemctl restart mysql
+sudo systemctl status mysql
+```
+
+<img width="578" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b5551292-b46f-4c48-b68e-391f3a596ce9">
+
+Open MySQL port 3306 on the DB Server EC2.
+Access to the DB Server is allowed only from the Subnet Cidr configured as source.
+
+
