@@ -312,4 +312,60 @@ sudo systemctl status mysql
 Open MySQL port 3306 on the DB Server EC2.
 Access to the DB Server is allowed only from the Subnet Cidr configured as source.
 
+## Step 3 - Prepare the Web Servers
 
+There is need to ensure that the Web Servers can serve the same content from a shared storage solution, in this case - NFS and MySQL database. One DB can be accessed for read and write by multiple clients. For storing shared files that the Web Servers will use, NFS is utilized and previousely created Logical Volume lv-apps is mounted to the folder where Apache stores files to be served to the users (/var/www).
+
+This approach makes the Web server stateless which means they can be replaced when needed and data (in the database and on NFS) integrtity is preserved
+
+In further steps, the following was done:
+
+- Configured NFS (This step was done on all 3 servers)
+- Deployed a tooling application to the Web Servers into a shared NFS folder
+- Configured the Web Server to work with a single MySQL database
+
+ ### Web Server 1
+ 
+1. Launch a new EC2 instance with RHEL Operating System
+2. Install NFS Client
+
+```
+sudo yum install nfs-utils nfs4-acl-tools -y
+```
+3. Mount /var/www/ and target the NFS server's export for apps. NFS Server private IP address = 172.31.43.22
+```
+sudo mkdir /var/www
+sudo mount -t nfs -o rw,nosuid 172.31.43.22:/mnt/apps /var/www
+```
+
+<img width="544" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/83e35d65-360e-4df3-8557-c797acf8fc4a">
+
+```
+sudo vi /etc/fstab
+```
+
+4. Add the following line
+(NFS Server private IP address = 172.31.43.22)
+
+```
+172.31.43.22:/mnt/apps /var/www nfs defaults 0 0
+```
+
+5. Install Remi's repoeitory, Apache and PHP
+```
+sudo yum install git -y
+sudo yum install httpd -y
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y
+sudo dnf install dnf-utils http://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
+sudo dnf module reset php -y -y
+sudo dnf module enable php:remi-7.4 -y
+sudo dnf install php php-opcache php-gd php-curl php-mysqlnd -y -y
+sudo systemctl start php-fpm
+sudo systemctl enable php-fpm
+sudo setsebool -P httpd_execmem 1
+
+```
+
+<img width="482" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6b75f2ff-a47f-4f89-9ff2-f76a56eec371">
+
+Repeat steps 1–5 for another 2 Web servers.
