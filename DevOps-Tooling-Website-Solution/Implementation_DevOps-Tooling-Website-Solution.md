@@ -124,6 +124,8 @@ sudo lvcreate -L 10G -n lv_opt vg_nfs
 ```
 <img width="494" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f0e78769-2a1d-4d2a-a470-c797d37975ab">
 
+<br>
+
 <img width="335" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7a7e4625-566f-4cda-9b22-9da965d53791">
 
 
@@ -175,7 +177,7 @@ sudo systemctl status nfs-server.service
 <img width="796" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/412b46d2-d9da-4efa-af07-dab36698008b">
 
 
-#### 4. Export the Mounts for Web Servers
+#### 4. Export the Mounts for Web Servers subnet cidr(IPv4 cidr) to connect as clients. For simplicity, all 3 Web Servers are installed in the same subnet but in production set up, each tier should be separated inside its own subnet or higher level of security
 
 ##### a. Set Up Permissions for the Mount Points
 ```bash
@@ -203,12 +205,18 @@ Add the following lines, replacing `<Subnet-CIDR>` with your actual subnet CIDR 
 /mnt/logs <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
 /mnt/opt <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
 ```
+```
+/mnt/apps 172.31.32.0/20(rw,sync,no_all_squash,no_root_squash)
+/mnt/logs 172.31.32.0/20(rw,sync,no_all_squash,no_root_squash)
+/mnt/opt 172.31.32.0/20(rw,sync,no_all_squash,no_root_squash)
+```
 Save and exit the editor (`Esc + :wq`).
 
 ##### c. Export the NFS Shares
 ```bash
 sudo exportfs -arv
 ```
+<img width="299" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/4fed0fde-4f94-48cd-ac5b-45318ad36a45">
 
 ##### d. Restart NFS Server to Apply Changes
 ```bash
@@ -216,3 +224,14 @@ sudo systemctl restart nfs-server.service
 ```
 
 With these steps, the NFS server should be configured, running, and accessible to your web servers within the same subnet.
+
+#### 5. Check which port is used by NFS and open it using the security group (add new inbound rule)
+```
+rpcinfo -p | grep nfs
+```
+
+<img width="328" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d10e9f6e-177b-4c95-8502-7dcf91d4ae6a">
+
+Note: For NFS Server to be accessible from the client, the following ports must be opened: TCP 111, UDP 111, UDP 2049, NFS 2049. Set the Web Server subnet cidr as the source
+
+<img width="687" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d5c43eb2-4618-4430-9f6a-99e08e3717c9">
