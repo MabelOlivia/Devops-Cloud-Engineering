@@ -369,3 +369,88 @@ sudo setsebool -P httpd_execmem 1
 <img width="482" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6b75f2ff-a47f-4f89-9ff2-f76a56eec371">
 
 Repeat steps 1–5 for another 2 Web servers.
+
+6. Verify that Apache files and directories are available on the Web Server in /var/www and also on the NFS server in /mnt/apps. If you see the same files, it means NFS is mounted correctly. You can test this by creating a new file from one web server and check if it is accessible from other web servers.
+
+<img width="448" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/ac605b36-fafe-4f51-9c81-8a3571100e46">
+
+7. Locate the log folder for Apache on the Web Server and mount it to NFS server's export for logs. Repeat step 4 to ensure the mount point persists after reboot.
+```
+sudo vi /etc/fstab
+```
+Add the following line
+```
+172.31.43.22:/mnt/logs /var/log/httpd nfs defaults 0 0
+```
+
+8. Fork the tooling source code from StegHub GitHub Account
+
+<img width="932" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2f63d10f-4861-4c43-9d08-2c95f764422f">
+
+9. Deploy the tooling Website's code to the Web Server. Ensure that the html folder from the repository is deployed to /var/www/html
+
+<img width="564" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3c56b8cd-d7f5-4382-bb2c-90d456852ef6">
+
+```
+sudo cp -R html/. /var/www/html
+```
+
+![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e158a346-4bfd-444a-a807-7f5c9f0696a2)
+
+Note: Acces the website on a browser
+
+- Ensure TCP port 80 is open on the Web Server.
+- If 403 Error occur, check permissions to the /var/www/html folder and also disable SELinux
+
+```  
+sudo setenforce 0
+```
+
+To make the change permanent, open selinux file and set selinux to disable.
+
+```
+sudo vi /etc/sysconfig/selinux
+
+SELINUX=disabled
+
+sudo systemctl restart httpd
+```
+
+10. Update the website's configuration to connect to the database (in /var/www/html/function.php file). Apply tooling-db.sql command sudo mysql -h <db-private-IP> -u <db-username> -p <db-password < tooling-db.sql
+
+```
+sudo vi /var/www/html/functions.php
+```
+
+// connect to database
+mysqli_connect('172.31.38.185', 'webaccess', 'Password', 'tooling');
+
+<img width="759" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e70ede9c-3651-428c-87f3-0125b9e7d046">
+
+```
+sudo mysql -h 172.31.38.185 -u webaccess -p tooling < tooling-db.sql
+```
+
+Access the database server from Web Server
+
+```
+sudo mysql -h 172.31.38.185 -u webaccess -p
+```
+
+<img width="676" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/82545e3f-d009-4ec5-9ad4-0da6f93ae7c7">
+
+11. Create in MySQL a new admin user with username: myuser and password: password
+```
+INSERT INTO users(id, username, password, email, user_type, status) VALUES (2, 'myuser', '5f4dcc3b5aa765d61d8327deb882cf99', 'user@mail.com', 'admin', '1');
+```
+
+12. Open a browser and access the website using the Web Server public IP address http://<Web-Server-public-IP-address>/index.php. Ensure login into the website with myuser user.
+
+<img width="900" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a5f06637-cd97-4043-8cbf-dd9e25f9f930">
+
+<img width="943" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5f959338-8f3d-4da2-9031-e32a82815b6f">
+
+
+#### *Conclusion*
+
+We have successfully implemented and deployed a DevOps tooling website solution that makes access to DevOps tools within a corporate infrastructure easily accessible. This comprises multiple web servers sharing a common database and also accessing the same files using Network File System (NFS) as shared file storage.
