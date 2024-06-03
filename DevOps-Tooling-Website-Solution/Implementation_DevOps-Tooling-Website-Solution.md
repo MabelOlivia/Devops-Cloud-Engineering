@@ -17,7 +17,7 @@ We will be implementing a solution that comprises multiple web servers sharing a
 <img width="572" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2646ddc9-9b65-40ec-bc9e-3c14cabe15c6">
 
 
-### Step 1 - Prepare NFS Server
+## Step 1 - Prepare NFS Server
 
 #### 1. Launch an EC2 Instance with RHEL Linux 8 Operating System
 
@@ -235,3 +235,64 @@ rpcinfo -p | grep nfs
 Note: For NFS Server to be accessible from the client, the following ports must be opened: TCP 111, UDP 111, UDP 2049, NFS 2049. Set the Web Server subnet cidr as the source
 
 <img width="687" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d5c43eb2-4618-4430-9f6a-99e08e3717c9">
+
+
+## Step 2  Configure the Database Server
+
+### 1. Launch a New EC2 Instance
+
+Launch a new EC2 instance with Ubuntu as the operating system.
+
+### 2. Install MySQL Server
+
+After logging into the Ubuntu instance, update the package index and install the MySQL server package:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install mysql-server
+```
+
+### 3. Create a Database
+
+Once MySQL is installed, log in to the MySQL shell as the root user:
+
+```bash
+sudo mysql -u root -p
+```
+
+Enter the root password you set during installation when prompted. Then, create a new database named `tooling`:
+
+```sql
+CREATE DATABASE tooling;
+```
+
+### 4. Create a Database User
+
+Next, create a database user named `webaccess`:
+
+```sql
+CREATE USER 'webaccess'@'%' IDENTIFIED BY 'Password';
+```
+
+### 5. Grant Permissions
+
+Grant the necessary permissions to the `webaccess` user on the `tooling` database, allowing access only from the subnet CIDR of your web servers. Replace `<subnet-CIDR>` with the actual CIDR of your web servers:
+
+```sql
+GRANT ALL PRIVILEGES ON tooling.* TO 'webaccess'@'<subnet-CIDR>';
+FLUSH PRIVILEGES;
+```
+
+For example, if your web servers' subnet CIDR is `172.31.32.0/20`, you would replace `<subnet-CIDR>` with `172.31.32.0/20`.
+
+### 6. Exit MySQL Shell
+
+Exit the MySQL shell:
+
+```sql
+exit;
+```
+
+Now, our MySQL database server is configured with a database named `tooling`, a user named `webaccess`, and the appropriate permissions for the web servers' subnet CIDR.
+
+<img width="493" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/216d2b72-e890-4ee3-99ac-98a19ec04ed8">
