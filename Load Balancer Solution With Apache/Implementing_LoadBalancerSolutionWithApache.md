@@ -38,7 +38,7 @@ Ensure that the following servers are installedd and configure already.
 
    <img width="731" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7a23860b-fabd-489e-8d66-5a65f3c16ce9">
    
-2. Open TCP port 80 on Project-8-apache-lb by creating an Inbounb Rule in Security Group
+2. Open TCP port 80 on Project-8-apache-lb by creating an Inbound Rule in Security Group
 
 3. Install Apache Load Balancer on Project-8-apache-lb and configure it to point traffic coming to LB to both Web Servers.
      
