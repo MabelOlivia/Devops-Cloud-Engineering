@@ -144,3 +144,70 @@ Check that the directory is unmounted
 ```
 df -h
 ```
+
+*Open two ssh consoles for both Web Server and run the command:*
+
+```
+sudo tail -f /var/log/httpd/access_log
+```
+
+<img width="762" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/38ebafc8-e052-4ff5-87f1-22d73ed8a8fc">
+
+<img width="761" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dc1638da-0858-41dd-bcfb-c920e88e9ec7">
+
+*Refresh the browser page several times and ensure both Web Servers receive HTTP and GET requests. New records must apear in each web server log files. The number of request to each servers will be approximately the same since loadfactor is set to the same value for both servers. This means that traffic will be evenly distributed between them.*
+
+<img width="764" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/51dba86c-dd79-4b2c-bf02-442fb6a4c5cb">
+
+<img width="764" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6f7fa145-d8d6-467f-9259-148d2ce6f9cf">
+
+### Optional Step - Configure Local DNS Names Resolution
+
+Sometimes it is tedious to remember and switch between IP addresses, especially if there are lots of servers to manage. It is best to configure local domain name resolution. The easiest way is use /etc/hosts file, although this approach is not very scalable, but it is very easy to configure and shows the concept well.
+
+Let us Configure the IP address to domain name mapping for our Load Balancer.
+
+- Open the hosts file
+
+```
+sudo vi /etc/hosts
+```
+
+Add two records into file with Local IP address and arbitrary name for the Web Servers
+
+<img width="395" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7cab74e0-ff2e-4bba-8aeb-9402aa2d144b">
+
+- Update the LB config file with those arbitrary names instead of IP addresses
+
+```
+sudo vi /etc/apache2/sites-available/000-default.conf
+```
+```
+BalancerMember http://Web1:80 loadfactor=5 timeout=1
+BalancerMember http://Web2:80 loadfactor=5 timeout=1
+```
+
+<img width="577" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/98ad1a17-b762-48d8-a7d9-e4dd665021d8">
+
+Let us try to curl the Web Servers from LB locally
+
+```
+curl http://Web1
+curl http://Web2
+```
+<img width="608" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/accf60df-4e46-4b61-86bf-a67dd217aa9f">
+
+**Note**, This is only internal configuration and also local to the LB server, these names will neither be 'resolvable' from other servers internally nor from the Internet.
+
+And Finally 🎉
+We have implemented a Load Balancing Web Solution
+
+
+
+
+
+
+
+
+
+
