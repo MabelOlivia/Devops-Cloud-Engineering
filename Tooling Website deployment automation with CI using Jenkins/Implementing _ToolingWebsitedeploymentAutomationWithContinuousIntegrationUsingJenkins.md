@@ -112,46 +112,16 @@ Jenkins is a Java-based application, so you'll need to install the Java Developm
    - Enter the initial admin password retrieved earlier.
    - Follow the setup wizard to install suggested plugins and create an admin user.
 
-<img width="863" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/adb06ecb-b754-4c4b-a8e4-05add92f7383">
+<img width="830" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/adb06ecb-b754-4c4b-a8e4-05add92f7383">
 
-<img width="846" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/76fef4bc-4327-409a-8822-9efc6b0c730c">
+<img width="830" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/76fef4bc-4327-409a-8822-9efc6b0c730c">
 
 <img width="830" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b81dc4ca-52f8-4f05-90dd-682b34794845">
 
-<img width="749" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0f588251-6ad9-4ed7-a68a-2485aa25ca37">
+<img width="830" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0f588251-6ad9-4ed7-a68a-2485aa25ca37">
 
-<img width="811" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6b2751d9-7bf3-4de0-b832-19e926dc2464">
+<img width="830" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6b2751d9-7bf3-4de0-b832-19e926dc2464">
 
-
-### Step 5: Create a Jenkins Job to Deploy Code from Git to NFS
-
-1. **Install Necessary Plugins**:
-   - Go to `Manage Jenkins` -> `Manage Plugins` and install:
-     - Git Plugin
-     - NFS Plugin
-
-2. **Create a New Jenkins Job**:
-   - Go to `New Item`, enter a name for your job, and select `Freestyle project`.
-   - In the job configuration:
-     - **Source Code Management**:
-       - Select `Git` and enter the repository URL.
-       - Provide credentials if necessary.
-     - **Build Triggers**:
-       - Select `Poll SCM` and enter a schedule (e.g., `H/5 * * * *` for polling every 5 minutes).
-     - **Build**:
-       - Add a build step: `Execute shell`.
-       - In the shell command, enter the script to deploy code to the NFS server. For example:
-         ```sh
-         git archive --format=tar HEAD | (cd /path/to/nfs/mount && tar xf -)
-         ```
-
-3. **Save and Run the Job**:
-   - Save the job configuration and run it manually to test.
-   - Ensure that subsequent changes to the Git repository trigger the job and deploy the code to the NFS server.
-
-### Summary
-
-You've now set up a Jenkins server on an AWS EC2 instance running Ubuntu 24.04 LTS, installed the necessary software, and created a Jenkins job to automate the deployment of source code changes from Git to an NFS server. This setup helps streamline your CI/CD pipeline and ensures that your code is always up to date on the NFS server.
 
 
 ## Task 2 - Configure Jenkins to retrieve source codes from GitHub using Webhooks
@@ -185,11 +155,104 @@ But this build does not produce anything and it runs only when we trigger it man
   Now, go ahead and make some change in any file in our GitHub repository (e.g. README.MD file) and push the changes to the main branch.
   We will see that a new build has been launched automatically by webhook and its results - artifacts, saved on Jenkins server.
 
+<img width="597" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/45d0f5b9-587d-4ddb-af87-22ad84233f35">
+
+<img width="480" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f855cd49-cb60-432f-9265-b4789ab26b63">
+
+Now we configured an automated Jenkins job that receives files from GitHub by webhook trigger this method is considered as push because the changes are being pushed and files transfer is initiated by GitHub. There are also other methods: ***trigger one job (downstreadm) from another (upstream), poll GitHub periodically*** and others.
+
+By default, the artifacts are stored on Jenkins server locally
+
+```
+ls /var/lib/jenkins/jobs/Devops_tooling/builds/<build_number>/archive/
+
+ls /var/lib/jenkins/jobs/Devops_tooling/builds/6/archive/
+```
+
+<img width="576" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e2897cf4-2990-47bb-b1ab-4c1fdc067e76">
 
 
 
 
+## Task 3 - Configure Jenkins to copy files to NFS server via SSH
+Now we have our artifacts saved locally on Jenkins server, the next step is to copy them to our NFS server to /mnt/apps directory.
 
+Jenkins is a highly extendable application and there are more than 1400 plugins available. now we will need a plugin that is called Publish Over SSH
+
+**1. Install Publish Over SSH plugin.**
+On main dashboard, Select Manage Jenkins > Manage Plugins > Available > Search for Publish over SSH and Install without restart.
+
+<img width="950" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9eae8df8-f7bc-4e63-95bb-01bdb88ad112">
+
+
+**2. Configure the job/project to copy artifacts over to NFS server**
+On main dashboard select Manage Jenkins > Configure System menu item.
+
+Scroll down to Publish over SSH plugin configuration section and configure it to be able to connect to your NFS server:
+
+Provide a private key (content of .pem file that we use to connect to NFS server via SSH/Putty)
+
+Arbitrary name
+
+Hostname - can be private IP address of our NFS server
+
+Username - ec2-user (since NFS server is based on EC2 with RHEL 9)
+
+Remote directory - /mnt/apps since our Web Servers use it as a mounting point to retrieve files from the NFS server
+
+<img width="855" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d9c1806a-5729-45af-9f49-9e7ad13a5b46">
+
+Test the configuration and make sure the connection returns Success. N.B that TCP port 22 on NFS server must be open to receive SSH connections
+
+<img width="786" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0d19f4cc-1595-4e11-a685-a0a6975bad3a">
+
+Save the configuration, open your Jenkins job/project configuration page and add another one Post-build Action (Send build artifact over ssh).
+
+<img width="252" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/14c4ef0b-cfaa-485b-a9a2-5cc78743b028">
+
+Also, Configure it to send all files produced by the build into our previouslys define remote directory In our case we want to copy all files and directories, so we use ** .
+
+<img width="586" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/567520a5-0655-456c-8af4-a47b7a313214">
+
+Save this configuration and go ahead, change something in README.MD file in our GitHub Tooling repository
+
+Webhook will trigger a new job #7
+
+<img width="572" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/90810b3b-37de-4335-81b6-52ef360c6eb3">
+
+The error in the build #5 above indicates that we need to set permissions for user ec2-user on the NFS server : Ensure the target directory (/mnt) and it's contents on the NFS server has the correct permissions. We might need to change ownership or modify the permissions to allow the Jenkins user to write to it.
+
+```
+sudo chown -R ec2-user:ec2-user /mnt/apps
+sudo chmod -R 777 /mnt/apps
+```
+
+Run the build again from jenkins GUI
+
+Webhook triggers a new job and in the Console Output of the job we get something like this:
+
+<img width="552" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/504af785-5e4d-41e1-b5be-e2802cfa0d84">
+
+To make sure that the files in /mnt/apps have been updated - connect via SSH to our NFS Server and verify README.MD file
+
+```
+ls /mnt/apps
+
+or
+
+ls -l /mnt/apps
+```
+
+<img width="395" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/633670ca-6752-41dc-a146-db57cfd5f171">
+
+```
+cat /mnt/apps/README.md
+```
+
+<img width="476" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dac28bca-d34d-4168-b2e5-c8b526b7a181">
+
+
+If you see the changes you had previously made in your GitHub - the job works as expected.
 
 
 
