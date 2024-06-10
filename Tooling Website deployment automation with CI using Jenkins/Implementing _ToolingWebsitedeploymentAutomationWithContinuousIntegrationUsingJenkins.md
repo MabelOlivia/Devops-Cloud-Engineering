@@ -4,7 +4,7 @@ In this project we are going to start automating part of our routine tasks with 
 
 Acording to Circle CI, Continuous integration (CI) is a software development strategy that increases the speed of development while ensuring the quality of the code that teams deploy. Developers continually commit code in small increments which is then automatically built and tested before it is merged with the shared repository.
 
-### Task
+## Task
 
 Enhance the architecture prepared in the previous project by adding a Jenkins server, configure a job to automatically deploy source codes changes from Git to NFS server.
 
@@ -12,6 +12,7 @@ Here is how the updated architecture looks.
 
 <img width="495" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b838a487-7a53-451f-b495-9586cca42468">
 
+## Task 1
 
 ### Step 1: Create an AWS EC2 Instance
 
@@ -151,6 +152,41 @@ Jenkins is a Java-based application, so you'll need to install the Java Developm
 ### Summary
 
 You've now set up a Jenkins server on an AWS EC2 instance running Ubuntu 24.04 LTS, installed the necessary software, and created a Jenkins job to automate the deployment of source code changes from Git to an NFS server. This setup helps streamline your CI/CD pipeline and ensures that your code is always up to date on the NFS server.
+
+
+## Task 2 - Configure Jenkins to retrieve source codes from GitHub using Webhooks
+
+In this part, we will learn how to configure a simple Jenkins job/project. This job will will be triggered by GitHub webhooks and will execute a build task to retrieve codes from GitHub and store it locally on Jenkins server.
+
+1. Enable webhooks in your GitHub repository settings.
+On your GitHub repository,
+
+Select Settings > Webhooks > Add webhook
+
+<img width="769" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a6208f36-bd4c-4391-ab0a-809c7d2d6bdc">
+
+2. Go to Jenkins web console, click New Item and create a Freestyle project
+<img width="927" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6e40a2f3-8bf6-4b77-aa1a-49c62f4f3440">
+
+Save the configuration and try to run the build. For now we can only do it manually. Click Build Now button. After all was configured correctly, the build was successfull and was seen under #5 You can open the build and check in Console Output if it has run successfully.
+
+<img width="956" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e8b50fcb-755d-4e25-bb91-efd88185a1dc">
+
+But this build does not produce anything and it runs only when we trigger it manually. Let us fix it.
+
+3. Click Configure our job/project and add these two configurations
+- Configure triggering the job from GitHub webhook 
+- Configure Post-build Actions to archive all the files - files resulted from a build are called artifacts
+
+  <img width="466" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8832ee47-868d-4131-a2f8-8b7927a2579e">
+
+  <img width="647" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/045214f6-282f-4ed4-890c-08b2cd8b4bf6">
+
+  Now, go ahead and make some change in any file in our GitHub repository (e.g. README.MD file) and push the changes to the main branch.
+  We will see that a new build has been launched automatically by webhook and its results - artifacts, saved on Jenkins server.
+
+
+
 
 
 
