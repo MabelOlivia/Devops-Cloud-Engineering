@@ -190,15 +190,15 @@ On main dashboard select Manage Jenkins > Configure System menu item.
 
 Scroll down to Publish over SSH plugin configuration section and configure it to be able to connect to your NFS server:
 
-Provide a private key (content of .pem file that we use to connect to NFS server via SSH/Putty)
+- Provide a private key (content of .pem file that we use to connect to NFS server via SSH/Putty)
 
-Arbitrary name
+- Arbitrary name
 
-Hostname - can be private IP address of our NFS server
+- Hostname - can be private IP address of our NFS server
 
-Username - ec2-user (since NFS server is based on EC2 with RHEL 9)
+- Username - ec2-user (since NFS server is based on EC2 with RHEL 9)
 
-Remote directory - /mnt/apps since our Web Servers use it as a mounting point to retrieve files from the NFS server
+- Remote directory - /mnt/apps since our Web Servers use it as a mounting point to retrieve files from the NFS server
 
 <img width="855" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d9c1806a-5729-45af-9f49-9e7ad13a5b46">
 
@@ -252,7 +252,10 @@ cat /mnt/apps/README.md
 <img width="476" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dac28bca-d34d-4168-b2e5-c8b526b7a181">
 
 
-If you see the changes you had previously made in your GitHub - the job works as expected.
+## If you see the changes you had previously made in your GitHub - the job works as expected.
+
+
+<img width="400" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b6483718-14b0-4ec3-9741-7c8f187363c6">
 
 
 
