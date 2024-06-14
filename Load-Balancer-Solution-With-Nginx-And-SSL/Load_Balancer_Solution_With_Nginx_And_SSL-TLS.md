@@ -73,54 +73,81 @@ To configure Nginx as a Load Balancer, follow these steps. First, you'll need to
    <img width="725" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e78ac6d3-4e91-490a-bfb0-72ef16a67629">
 
 
-### Step 2: Connect to Your EC2 Instance
+To update the `/etc/hosts` file on your Nginx load balancer for local DNS with the web servers' names and their local IP addresses, follow these steps:
 
-1. **Get the Public IP Address**:
-   - Once your instance is running, go to the Instances page and note the public IP address or DNS name of your instance.
+### Step 2: Update `/etc/hosts` File
 
-2. **SSH into the Instance**:
-   - Use an SSH client to connect to your instance.
-   - Replace `your-key-pair.pem` with your key pair file, and `ec2-user@your-public-ip` with the appropriate user and IP address.
-   
+1. **SSH into the Nginx Load Balancer Instance**:
+   - If you are not already connected, use SSH to connect to your EC2 instance.
+
    ```sh
    ssh -i "your-key-pair.pem" ubuntu@your-public-ip
    ```
 
-### Step 3: Install Nginx
+2. **Open the `/etc/hosts` File**:
+   - Use a text editor like `nano` to edit the `/etc/hosts` file.
 
-1. **Update Package Lists**:
    ```sh
-   sudo apt update
+   sudo vi /etc/hosts
    ```
 
-2. **Install Nginx**:
+3. **Add Web Servers' Names and IP Addresses**:
+   - Add the local IP addresses and names of your web servers. For example, if your web servers have IP addresses `172.31.47.234` and `172.31.38.199`, and you want to name them `web1` and `web2`, you would add the following lines to the file:
+
    ```sh
-   sudo apt install nginx -y
+   172.31.47.234   web1
+   172.31.38.199   web2
+   ```
+   <img width="441" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/6bd9a119-4ae7-43ee-adf3-9c5d994f01b8">
+
+
+4. **Save and Exit**:
+   - Save the changes and exit the text editor. In `nano`, you can do this by pressing `Ctrl+O` to save and `Ctrl+X` to exit.
+
+5. **Verify the Changes**:
+   - You can verify that the changes have been applied correctly by pinging the web server names.
+
+   ```sh
+   ping web1
+   ping web2
    ```
 
-3. **Start and Enable Nginx**:
-   ```sh
-   sudo systemctl start nginx
-   sudo systemctl enable nginx
-   ```
+   - You should see replies from the respective IP addresses.
 
-### Step 4: Configure Nginx as a Load Balancer
+### Example `/etc/hosts` File
+
+Here is how the `/etc/hosts` file might look after the changes:
+
+```sh
+127.0.0.1       localhost
+127.0.1.1       nginx-lb
+
+# Web servers
+192.168.1.10    web1
+192.168.1.11    web2
+```
+
+This configuration allows your Nginx load balancer to resolve the names `web1` and `web2` to their respective IP addresses.
+
+### Next Steps
+
+With the `/etc/hosts` file updated, you can now proceed to configure Nginx to use these names in its load balancing configuration. Update the `nginx.conf` file to use `web1` and `web2` as the upstream servers.
+
+### Update Nginx Configuration
 
 1. **Edit Nginx Configuration**:
-   - Open the default Nginx configuration file.
-   
    ```sh
    sudo nano /etc/nginx/nginx.conf
    ```
 
 2. **Configure Load Balancer Settings**:
-   - Add a new `upstream` block and configure the backend servers. Replace `backend1.example.com` and `backend2.example.com` with your actual backend server addresses.
+   - Use the names `web1` and `web2` in the `upstream` block.
 
    ```nginx
    http {
        upstream backend_servers {
-           server backend1.example.com;
-           server backend2.example.com;
+           server web1;
+           server web2;
        }
 
        server {
@@ -142,20 +169,14 @@ To configure Nginx as a Load Balancer, follow these steps. First, you'll need to
    ```sh
    sudo nginx -t
    ```
+   <img width="377" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/03827c9a-f054-4e19-99b0-9762f259e4af">
+
 
 4. **Restart Nginx**:
    ```sh
    sudo systemctl restart nginx
    ```
 
-### Step 5: Verify Load Balancer
+   <img width="724" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f0ad9ae0-f9e2-4e1e-9da4-ebebceffb36e">
 
-1. **Access the Load Balancer**:
-   - Open a web browser and navigate to the public IP address or DNS name of your Nginx load balancer.
-   - You should be able to access your backend servers through the load balancer.
-
-With these steps, you have successfully configured an Nginx load balancer on an EC2 instance running Ubuntu Server 24.04 LTS. Next, you can proceed to configure SSL/TLS to secure the connections.
-
-
-
-
+Now, your Nginx load balancer should be able to route traffic to `web1` and `web2` using the names you defined in the `/etc/hosts` file.
