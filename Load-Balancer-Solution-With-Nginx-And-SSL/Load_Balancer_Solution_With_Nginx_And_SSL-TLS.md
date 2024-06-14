@@ -32,7 +32,7 @@ Our target architecture of the solution
 
 <img width="568" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/20dbbde5-bdf6-43cf-9cbc-75f34fae08d9">
 
-### Part 1 - Configure Nginx As A Load Balancer
+## Part 1 - Configure Nginx As A Load Balancer
 To configure Nginx as a Load Balancer, follow these steps. First, you'll need to create an EC2 instance running Ubuntu Server 24.04 LTS. Here's how you can do it:
 
 ### Step 1: Launch an EC2 Instance
@@ -180,3 +180,99 @@ With the `/etc/hosts` file updated, you can now proceed to configure Nginx to us
    <img width="724" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f0ad9ae0-f9e2-4e1e-9da4-ebebceffb36e">
 
 Now, your Nginx load balancer should be able to route traffic to `web1` and `web2` using the names you defined in the `/etc/hosts` file.
+
+
+
+## Part 2 - Register a New Domain Name and Configure Secured Connection Using SSL/TLS Certificates
+
+Let us make the necessary configurations to make connections to our Tooling Web Solution secure! To get a valid SSL certificate, you need to register a new domain name. This can be done using any domain name registrar, such as GoDaddy.com, cloudns.net,  Domain.com, or Bluehost.com. Follow the steps below:
+
+### 1. Register a New Domain Name
+- Choose a domain name registrar of your choice. (cloudns.net)
+- Register a new domain name in any domain zone (e.g., .com, .net, .org, .edu, .info, .xyz, or any other).
+
+<img width="944" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a785d714-554e-4c81-8b1f-d84e796575ba">
+
+
+### 2. Assign an Elastic IP to Your Nginx LB Server
+Every time you restart or stop/start your EC2 instance, you get a new public IP address. To have a static IP address that does not change after reboot, use an Elastic IP. Follow these steps:
+- Allocate an Elastic IP.
+  
+<img width="927" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d05ff688-b0cd-4195-a2b3-133c89c21fb0">
+
+- Associate the Elastic IP with your Nginx Load Balancer (LB) server.
+
+<img width="510" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2fc2c8d0-75ea-48a5-9e48-abdf4c859965">
+
+<img width="768" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f0ebdc42-6499-4b61-b629-442000089bfd">
+
+
+You can learn how to allocate an Elastic IP and associate it with an EC2 server on [this page](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html).
+
+### 3. Update A Record in Your Registrar
+To point your domain name to your Nginx LB using the Elastic IP address, update the A record in your domain registrar's settings. Follow these steps:
+- Log in to your domain registrar’s account.
+- Navigate to the DNS settings for your domain.
+- Update the A record to point to the Elastic IP address assigned to your Nginx LB.
+
+<img width="527" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b9e626b8-3d09-42e2-b7fb-c7c7b765a4ea">
+
+We can use [nds checker](https://dnschecker.org/#A/www.toolingsolution.dns-dynamic.net) to verify the DNS record
+
+<img width="343" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9e83f06c-d78d-431d-8bfd-71a72b8ed0be">
+
+
+You can learn how to associate your domain name with your Elastic IP on [this page](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-ec2-instance.html).
+
+
+By following these steps, you will successfully register a new domain name, assign an Elastic IP to your Nginx LB server, and associate your domain name with the Elastic IP.
+
+
+### 4. Configure Nginx to Recognize Your New Domain Name
+
+To configure Nginx to recognize your new domain name, follow these steps:
+
+
+ **Open the Nginx Configuration File**:
+   - You can either edit the main `nginx.conf` file or the specific site configuration file. Typically, site-specific configurations are stored in `/etc/nginx/sites-available`.
+
+   ```sh
+   sudo vi /etc/nginx/sites-available/default
+   ```
+
+   Or if you are using the main `nginx.conf`:
+
+   ```sh
+   sudo vi /etc/nginx/nginx.conf
+   ```
+
+ **Update the `server_name` Directive**
+   - Find the server block and update the `server_name` directive to reflect your new domain name. For example, if your new domain name is `www.devopstest.dns-dynamic.net`, update it as follows:
+
+   ```nginx
+   server {
+       listen 80;
+       server_name www.devopstest.dns-dynamic.net;
+
+       # Other configurations...
+   }
+   ```
+
+ **Save and Exit**:
+   - Press `Esc` to exit insert mode in `vi`.
+   - Type `:wq` and press `Enter` to save the file and exit.
+
+ **Test Nginx Configuration**:
+   - Before restarting Nginx, test the configuration to ensure there are no syntax errors.
+
+   ```sh
+   sudo nginx -t
+   ```
+
+ **Reload Nginx**:
+   - If the configuration test is successful, reload Nginx to apply the changes.
+
+   ```sh
+   sudo systemctl reload nginx
+   ```
+
