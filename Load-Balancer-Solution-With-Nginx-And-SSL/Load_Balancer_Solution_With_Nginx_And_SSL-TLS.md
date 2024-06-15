@@ -276,3 +276,67 @@ To configure Nginx to recognize your new domain name, follow these steps:
    sudo systemctl reload nginx
    ```
 
+### 5. Install certbot and request for an SSL/TLS certificate
+
+Ensure snapd service is active and running
+
+```
+sudo systemctl status snapd
+```
+
+<img width="817" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b6045e71-4380-4ec9-b87e-a0eefc04abfc">
+
+Install certbot
+
+```
+sudo snap install --classic certbot
+```
+<img width="351" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/056ee5bc-74ec-4ad6-a97d-6ecfe60ddc7e">
+
+##### Request SSL/TLS Certificate
+
+To secure your website with SSL/TLS, follow these steps to request a certificate using Certbot:
+
+ **Create a Symlink in /usr/bin for Certbot**:
+   - Place a symbolic link in this PATH to make it easier to run Certbot from the command line without needing to specify its full path.
+
+   ```sh
+   sudo ln -s /snap/bin/certbot /usr/bin/certbot
+   ```
+
+ **Follow the Certbot Instructions**:
+   - Use Certbot to obtain an SSL/TLS certificate. Certbot will look up the domain name from the Nginx configuration file, so ensure you have updated it as per step 4.
+
+   ```sh
+   sudo certbot --nginx
+   ```
+
+   - During this process, Certbot will prompt you to choose which domain you want your certificate to be issued for. Select the appropriate domain(s) listed in your Nginx configuration.
+
+   <img width="541" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/151cb7a9-29c2-4767-95af-3efa17c34dae">
+
+
+By following these steps, you'll create a symlink for Certbot, making it easier to run, and then obtain and configure an SSL/TLS certificate for your domain using Certbot with Nginx.
+
+### 6. Test Secured Access to Your Web Solution
+
+To verify that your web solution is secured with SSL/TLS, follow these steps:
+
+1. **Access Your Website**:
+   - Open a web browser.
+   - Navigate to `https://<your-domain-name.com>`.
+
+2. **Verify HTTPS Protocol**:
+   - Ensure that you are accessing the website using the HTTPS protocol, which uses TCP port 443.
+
+3. **Check for the Padlock Icon**:
+   - Look for a padlock icon in the browser's address bar.
+   - This indicates that the connection is secure.
+
+4. **View Certificate Details**:
+   - Click on the padlock icon.
+   - View the details of the certificate issued for the website to confirm its validity.
+
+By following these steps, you will be able to test and confirm that your website is accessible over HTTPS and secured with an SSL/TLS certificate.
+
+
