@@ -326,6 +326,9 @@ To verify that your web solution is secured with SSL/TLS, follow these steps:
    - Open a web browser.
    - Navigate to `https://<your-domain-name.com>`.
 
+<img width="644" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/119bb68a-8631-4def-bdf9-348063a705b8">
+
+
 2. **Verify HTTPS Protocol**:
    - Ensure that you are accessing the website using the HTTPS protocol, which uses TCP port 443.
 
@@ -333,10 +336,37 @@ To verify that your web solution is secured with SSL/TLS, follow these steps:
    - Look for a padlock icon in the browser's address bar.
    - This indicates that the connection is secure.
 
+<img width="335" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d0b3e952-fcf5-4c00-9842-eb951621ffee">
+
+
+
 4. **View Certificate Details**:
    - Click on the padlock icon.
    - View the details of the certificate issued for the website to confirm its validity.
 
+<img width="409" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/37bc913f-3092-4ce7-be65-58f4c488ceb7">
+
 By following these steps, you will be able to test and confirm that your website is accessible over HTTPS and secured with an SSL/TLS certificate.
+
+
+### 7. Set up periodical renewal of your SSL/TLS certificate**
+
+By default, `Let's Encrypt` certificates are valid for 90 days, so it is recommended to renew them at least every 60 days or more frequently.
+
+**Test the renewal command in `dry-run` mode:**
+
+```bash
+sudo certbot renew --dry-run
+```
+<img width="452" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/b2907693-dc40-4859-804f-de5d569ad1d2">
+
+This command allows you to simulate the renewal process without actually modifying any live certificates. It's a good practice to test this periodically to ensure your renewal process is set up correctly and to detect any potential issues in advance.
+
+**Best pracice is to have a scheduled job that runs renew command periodically. Configure a `cronjob` to run the command twice a day**
+
+Edit the crontab file
+```
+crontab -e
+```
 
 
