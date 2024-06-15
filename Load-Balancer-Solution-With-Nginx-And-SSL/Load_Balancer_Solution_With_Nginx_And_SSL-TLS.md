@@ -369,4 +369,20 @@ Edit the crontab file
 crontab -e
 ```
 
+<img width="331" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/741b5760-bb12-41b9-83ec-d7310a2eadd2">
+
+**Add the following line to scheduled a job that runs renew command twice daily**
+
+```
+* */12 * * *   root /usr/bin/certbot renew > /dev/null 2>&1
+```
+
+You can always change the interval of the cronjob if twice a day is too often by adjusting the schedule expression.
+
+#### Congratulations!
+
+We have just implemented an Nginx Load Balancing Web Solution with secured HTTPS connection with periodically updated SSL/TLS certificates.
+
+
+
 
