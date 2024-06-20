@@ -510,13 +510,70 @@ ssh -A ubuntu@13.50.43.191
 Run your playbook:
 
 ```
-#navigate to ansible build files
-cd /var/lib/jenkins/jobs/ansible/builds/1/archive/
+#navigate to ansible-config-mgt
+cd ansible-config-mgt
 
 #run the playbook command
 ansible-playbook -i inventory/dev.yml playbooks/common.yml
 ```
  
+<img width="682" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f913f8d5-fa6b-474c-8345-1db64895c6b9">
+
+You can go to each of the servers and check if wireshark has been installed by running
+
+```
+which wireshark
+
+or
+
+wireshark --version
+```
+
+- Web Server 1
+
+<img width="532" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/66e2a2e4-43de-4df5-99e1-72ee3ac44bb3">
+
+- Web Server 2
+
+<img width="532" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e21247d3-8eeb-4f10-bce0-c2be089bc056">
+
+- DB Server
+
+<img width="532" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3a646f69-4dcc-4dc5-b527-95984e62eec6">
+
+- NginX LB
+
+<img width="532" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7a4599ed-c570-4120-8cb2-1fd86776af5c">
+
+
+**Our updated with Ansible architecture now looks like this:**
+
+<img width="544" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/bcce3834-53fb-4332-9c6d-9b830b3ad1e9">
+
+### Optional Step: Repeat the Process
+
+To continuously improve your automation, update your Ansible playbook with new tasks and repeat the full development cycle:
+
+1. **Checkout**
+2. **Change Codes**
+3. **Commit**
+4. **PR**
+5. **Merge**
+6. **Build**
+7. **Run Ansible Playbook**
+
+### Conclusion
+
+Congratulations! We have successfully automated routine tasks using Ansible. This has walked us through:
+
+- Setting up Ansible
+- Creating and running playbooks
+- Automating server configurations
+
+By continuously updating your playbooks and following the development cycle, you can maintain and enhance your automated infrastructure management with ease.
+
+<img width="401" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/bf59fb35-4035-43af-b8bf-b054eaddd961">
+
 
 
 
