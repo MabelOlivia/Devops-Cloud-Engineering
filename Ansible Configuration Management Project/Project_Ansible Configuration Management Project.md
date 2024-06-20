@@ -484,6 +484,41 @@ Ansible server.
   
 <img width="609" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5f96c137-7a50-4af4-b453-aa1dcdc16528">
 
+<img width="477" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9dd0450d-59be-46ae-bc81-347a68534d5c">
+
+### Step 7 - Run First Ansible Test
+
+Now it's time to execute the `ansible-playbook` command and verify if your playbook actually works. First, set up Visual Studio Code to connect to your instance for remote development by following these steps:
+
+SSH into your Jenkins-Ansible instance Using the VSC SSH-Agent.
+
+Configure SSH keys for Ansible:
+
+```
+eval `ssh-agent -s`
+ssh-add <path-to-private-key>
+ssh-add -l
+```
+
+SSH into your Jenkins-Ansible server using ssh-agent:
+
+```
+ssh -A ubuntu@<public-ip>
+ssh -A ubuntu@13.50.43.191
+```
+
+Run your playbook:
+
+```
+#navigate to ansible build files
+cd /var/lib/jenkins/jobs/ansible/builds/1/archive/
+
+#run the playbook command
+ansible-playbook -i inventory/dev.yml playbooks/common.yml
+```
+ 
+
+
 
 
 
