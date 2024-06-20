@@ -80,6 +80,7 @@ sudo apt install ansible -y
 
   5. **Test your setup by making some change in `README.MD` file in master branch and make sure that builds starts automatically and Jenkins saves the files (build artifacts) in following folder**
 
+  <img width="540" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2d5d8d42-9b6a-4056-9942-e54e29789203">
 
   <img width="856" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c5aabd43-97e9-4539-9e9d-066f4c029162">
 
@@ -88,6 +89,28 @@ sudo apt install ansible -y
   ```
 
   <img width="491" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/255e72ac-ba98-413d-a611-251cb5cd9639">
+
+<br>
+
+**Tip**: Allocate an Elastic IP to your Jenkins-Ansible server to avoid reconfigure of GitHub webhook to a new IP address anytime you stop/start your Jenkins-Ansible server.
+
+Allocate elastic IP
+
+<img width="504" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/c3be470e-cb5f-4b2f-966e-4ee62cffc621">
+
+Associate the elastic IP
+
+<img width="506" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/58a03843-b75a-46fe-a53f-85c5ac760520">
+
+Update the webhook with the new Elastic Public IP
+
+<img width="707" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/9acd03fa-3d58-4550-9a82-a9fc51270492">
+
+
+Note: Elastic IP is free only when it is being allocated to an EC2 Instance, so do not forget to release Elastic IP once you terminate your EC2 Instance.
+
+
+
 
 
 
