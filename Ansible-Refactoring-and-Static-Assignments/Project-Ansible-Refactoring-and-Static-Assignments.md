@@ -66,7 +66,6 @@ You can configure the number of builds to keep in order to save space on the ser
    - Specify **ansible** as the source project.
    - Set `/home/ubuntu/ansible-config-artifact` as the target directory.
 
-<img width="889" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5869f816-ea65-4275-b1cd-97949edb8bb4">
 
-   
+<img width="889" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5869f816-ea65-4275-b1cd-97949edb8bb4">
 
