@@ -283,4 +283,318 @@ ansible-playbook -i inventory/dev.yml playbooks/site.yaml
 ```
 
 
+<img width="660" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/23692796-afe5-45bf-b909-6cdc50a522bb">
+
+Esure that wireshark is deleted on all the servers
+
+Run `wireshark --version` to check
+
+<img width="293" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/688e142a-5607-4aae-8615-2f0573100b46">
+
+<img width="351" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/2722b9cc-55e9-4d75-983c-fcc9a109523a">
+
+
+### Step 3 - Configure UAT Webservers with a Role
+
+We have our nice and clean dev environment, so let us put it aside and configure 2 new Web Servers for UAT. Instead of writing tasks to configure Web Servers in the same playbook (which would be too messy), we will use a dedicated role to make our configuration reusable.
+
+#### 1. Launch EC2 Instances
+Launch 2 fresh EC2 instances using the RHEL 9 image. These will be our UAT servers, so give them names accordingly:
+- **Web1-UAT**
+- **Web2-UAT**
+
+<img width="785" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/82ffdcad-f778-4bf3-a636-69f4baa3ee5d">
+
+#### 2. Create the Webserver Role
+
+ **Create Role Directory Structure:**
+To create a role, you must create a directory called `roles/`, either relative to the playbook file or in the `/etc/ansible/` directory. Here are the two ways you can create this folder structure:
+
+#### Method 1: Using `ansible-galaxy`
+
+ **Create the roles directory:**
+   ```sh
+   mkdir roles
+   cd roles
+   ```
+
+ **Initialize the role:**
+   ```sh
+   ansible-galaxy init webserver
+   ```
+
+> **Note:** While you can choose either method, it is recommended to create folders and files in GitHub since you store all your code there, rather than locally on the Jenkins-Ansible server.
+
+#### Method 2: Manually Creating the Folder Structure
+
+You can manually create the folder structure if you prefer. If you create it manually, you can skip creating `tests`, `files`, and `vars` directories, or remove them if you used `ansible-galaxy`.
+
+### Role Directory Structure
+
+Your role directory structure should look like this:
+
+```plaintext
+ansible-config-mgt/
+├── roles
+│   └── webserver
+│       ├── tasks
+│       │   └── main.yml
+│       ├── handlers
+│       ├── templates
+│       ├── files
+│       ├── vars
+│       ├── defaults
+│       ├── meta
+│       └── README.md
+├── inventory
+│   └── dev.yml
+│   └── stage.yml
+│   └── uat.yml
+│   └── prod.yml
+└── playbooks
+    └── site.yml
+    └── uat.yml
+```
+
+   ```sh
+   mkdir roles
+   cd roles
+   mkdir -p webserver/{defaults,handlers,meta,tasks,templates}
+   touch webserver/README.md
+   touch webserver/defaults/main.yml
+   touch webserver/handlers/main.yml
+   touch webserver/meta/main.yml
+   touch webserver/tasks/main.yml
+
+   ```
+
+After removing unnecessary directories and files, the roles structure should look like this
+
+```
+└── webserver
+    ├── README.md
+    ├── defaults
+    │   └── main.yml
+    ├── handlers
+    │   └── main.yml
+    ├── meta
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml
+    └── templates
+```
+
+<img width="244" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/e358757b-cbb3-40c2-b0b6-8c66a142298b">
+
+
+#### 3. Update Inventory 
+Ensure your inventory file `ansible-config-mgt/inventory/uat.yml` file is updated with IP addresses of your 2 UAT Web servers
+
+NOTE: Ensure you are using ssh-agent to ssh into the Jenkins-Ansible instance
+
+```ini
+# inventory/uat.yml
+[webservers_uat]
+Web1-UAT ansible_host=<Web1-UAT_IP> ansible_user=ec2-user
+Web2-UAT ansible_host=<Web2-UAT_IP> ansible_user=ec2-user
+
+or
+
+[uat-webservers]
+<Web1-UAT-Server-Private-IP-Address> ansible_ssh_user='ec2-user'
+<Web2-UAT-Server-Private-IP-Address> ansible_ssh_user='ec2-user'
+```
+
+<img width="475" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8602d71a-e0d7-46b1-bc4d-8ac00ebd263a">
+
+#### 4. 
+In `/etc/ansible/ansible.cfg` file uncomment roles_path string and provide a full path to your roles directory `roles_path = /home/ubuntu/ansible-config-mgt/roles`, so Ansible could know where to find configured roles.
+
+<img width="487" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/11c62312-f0fc-484c-aaaf-3b9b4a543453">
+
+
+#### 5. 
+It is time to start adding some logic to the `webserver` role. Go into the `tasks` directory, and within the `main.yml` file, start writing configuration tasks to do the following:
+
+- Install and configure Apache (`httpd` service)
+- Clone the Tooling website from GitHub: [https://github.com//tooling.git](https://github.com//tooling.git)
+- Ensure the Tooling website code is deployed to `/var/www/html` on each of the 2 UAT Web servers
+- Make sure the `httpd` service is started
+
+Your `main.yml` consists of the following tasks:
+
+```yaml
+# webserver/tasks/main.yml
+# tasks file for webserver
+---
+- name: install apache
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.yum:
+    name: "httpd"
+    state: present
+
+- name: install git
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.yum:
+    name: "git"
+    state: present
+
+- name: clone a repo
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.git:
+    repo: https://github.com/MabelOlivia/tooling.git
+    dest: /var/www/html
+    force: yes
+
+- name: copy html content to one level up
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  command: cp -r /var/www/html/html/ /var/www/
+
+- name: Start service httpd, if not started
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: httpd
+    state: started
+
+- name: recursively remove /var/www/html/html/ directory
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: /var/www/html/html
+    state: absent
+```
+
+### Step 4 - Reference Webserver role
+
+Within the static-assignments folder, create a new assignment for uat-webservers `uat-webservers.yml`. This is where you will reference the role.
+
+```
+---
+- hosts: uat-webservers
+  roles:
+     - webserver
+```
+
+<img width="796" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dce15f0b-f2b5-4dbc-a11a-46e1251b25b5">
+
+
+Remember that the entry point to our ansible configuration is the `site.yml` file. Therefore, you need to refer your `uat-webservers.yml` role inside `site.yml`.
+
+So, we should have this in `site.yml`
+
+```
+---
+- hosts: all
+- import_playbook: ../static-assignments/common.yml
+
+- hosts: uat-webservers
+- import_playbook: ../static-assignments/uat-webservers.yml
+```
+
+<img width="531" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/16b51470-70d0-4b95-97ed-6c15e03a3b26">
+
+### Step 5 - Commit & Test
+
+Commit your changes, create a Pull Request and merge them to main branch, make sure webhook triggered two consequent Jenkins jobs, they ran successfully and copied all the files to your `Jenkins-Ansible` server into `/home/ubuntu/ansible-config-artifact/` directory.
+
+<img width="932" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/51c5861d-e5ef-4bd6-8d58-96c887c450e6">
+
+<img width="440" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/470f48d6-611f-4bf4-b9d8-0b4eacd063ae">
+
+
+Now run the playbook against your uat inventory and see what happens:
+
+#### NOTE: Before running your playbook, ensure you have tunneled into your Jenkins-Ansible server via ssh-agent
+
+#### To learn how to set up SSH agent and connect Visual Studio Code to your Jenkins-Ansible instance, please refer to the following resources:
+- For Windows users: [ssh-agent on Windows](https://www.youtube.com/watch?v=OplGrY74qog)
+- For Linux users: [ssh-agent on Linux](https://www.youtube.com/watch?v=OplGrY74qog)
+
+### Start the SSH Agent
+
+This starts the SSH agent in your current terminal session and sets the necessary environment variables.
+
+```bash
+eval `ssh-agent -s`
+```
+![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0c9ee207-828c-4687-9802-2009a6cbd7f8)
+
+### Add Your SSH Key
+
+Add your SSH private key to the agent. Replace `<path-to-private-key>` with the correct path to your private key.
+
+```bash
+ssh-add <path-to-private-key>
+```
+
+Replace `<path-to-private-key>` with the actual path to your SSH private key file. This will allow Ansible to SSH into your target servers from the Jenkins-Ansible host.
+
+<img width="543" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f2ee8ea3-3509-4ecc-95b2-20c8113daecd">
+
+
+### Verify the Key is Loaded
+
+Check that your key has been successfully added to the SSH agent. You should see the name of your key.
+
+```bash
+ssh-add -l
+```
+
+This command will list the keys that are currently loaded into the SSH agent. If your key has been successfully added, its name will be displayed in the output.
+
+<img width="555" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/1d127a55-b4d9-47c0-90e8-ce1b8f9bd05c">
+
+Now, ssh into your Jenkins-Ansible server using ssh-agent
+
+```
+ssh -A ubuntu@public-ip
+```
+
+
+```
+cd /home/ubuntu/ansible-config-artifact
+
+ansible-playbook -i /inventory/uat.yml playbooks/site.yml
+or
+ansible-playbook -i ~/ansible-config-mgt/inventory/uat.yml playbooks/site.yml
+
+```
+
+<img width="720" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/53478a5d-df34-4f8c-95ab-7aa654398ad7">
+
+
+You should be able to see both of your UAT Web servers configured and you can try to reach them from your browser:
+
+
+```
+http://<Web1-UAT-Server-Public-IP-or-Public-DNS-Name>/index.php
+
+or
+
+http://<Web1-UAT-Server-Public-IP-or-Public-DNS-Name>/index.php
+
+```
+
+Access Web1-UAT
+
+<img width="940" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/42dfe864-d6e6-441b-ae29-3d95a87b8253">
+
+Access Web2-UAT
+
+<img width="940" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/70c6c308-f00f-4658-82f9-4ae78abe009f">
+
+Our Ansible architecture now looks like this:
+
+<img width="363" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0cae5c0e-bea2-43ab-9fa3-0285ec861bb4">
 
