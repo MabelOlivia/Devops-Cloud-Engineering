@@ -169,9 +169,9 @@ Before starting to refactor the codes, ensure that you have pulled down the late
 
 <img width="372" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d58a33be-2d25-4ba5-be0e-f0241445e076">
 
-<img width="322" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a5838cd2-17ec-4a22-a8c4-b2832c5fa39e">
+<img width="322" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a5838cd2-17ec-4a22-a8c4-b2832c5fa39e"> <br>
 
-
+<br>
 
 **DevOps Philosophy and Refactoring**
 
@@ -571,8 +571,9 @@ ansible-playbook -i ~/ansible-config-mgt/inventory/uat.yml playbooks/site.yml
 
 ```
 
-<img width="720" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/53478a5d-df34-4f8c-95ab-7aa654398ad7">
+<img width="720" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/53478a5d-df34-4f8c-95ab-7aa654398ad7"> <br>
 
+<br>
 
 You should be able to see both of your UAT Web servers configured and you can try to reach them from your browser:
 
@@ -592,9 +593,11 @@ Access Web1-UAT
 
 Access Web2-UAT
 
-<img width="940" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/70c6c308-f00f-4658-82f9-4ae78abe009f">
+<img width="940" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/70c6c308-f00f-4658-82f9-4ae78abe009f"> <br>
+
+<br>
 
 Our Ansible architecture now looks like this:
 
-<img width="363" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0cae5c0e-bea2-43ab-9fa3-0285ec861bb4">
+<img width="850" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0cae5c0e-bea2-43ab-9fa3-0285ec861bb4">
 
