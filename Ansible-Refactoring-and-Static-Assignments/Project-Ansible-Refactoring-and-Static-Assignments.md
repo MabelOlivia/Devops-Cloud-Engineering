@@ -164,4 +164,123 @@ These steps should help in resolving the `AccessDeniedException` and allow Jenki
 
 <img width="830" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/77535998-5da8-4114-af81-329a0895c860">
 
+### Step 2 - Refactor Ansible code by importing other playbooks into site.yml
+Before starting to refactor the codes, ensure that you have pulled down the latest code from master (main) branch, and create a new branch, name it refactor.
+
+<img width="372" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/d58a33be-2d25-4ba5-be0e-f0241445e076">
+
+<img width="322" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a5838cd2-17ec-4a22-a8c4-b2832c5fa39e">
+
+
+
+**DevOps Philosophy and Refactoring**
+
+DevOps philosophy implies constant iterative improvement for better efficiency. Refactoring is one of the techniques that can be used, but you always have to answer the question "why?". Why do we need to change something if it works well?
+
+In a previous project, all tasks were written in a single playbook `common.yml`. Initially, this was a straightforward set of instructions for only 2 types of operating systems. However, imagine having many more tasks and needing to apply this playbook to servers with different requirements. In such cases, you would have to read through the entire playbook to check if all tasks are applicable and if anything needs to be added for specific server or OS families. This can quickly become a tedious exercise, leading to a messy playbook with many commented-out parts. Such organization may not be appreciated by your DevOps colleagues and could make the playbook difficult to use.
+
+Let's see code re-use in action by importing other playbooks.
+
+1. **Creating `site.yml` as an Entry Point**
+
+   Within the `playbooks` folder, create a new file named `site.yml`. This file will serve as the entry point into the entire infrastructure configuration. Other playbooks will be included here as references. In other words, `site.yml` will become a parent to all other playbooks that will be developed, including `common.yml` that you created previously.
+
+2. **Organizing Playbooks**
+
+   Create a new folder in the root of the repository named `static-assignments`. This folder is where all other children playbooks will be stored. This organizational structure is for ease of work management. While not an Ansible-specific concept, it allows you to choose how you organize your work effectively. The prefix `static` in the folder name hints at its purpose, which will become clearer soon. For now, follow along with the organizational setup.
+
+3. **Moving `common.yml`**
+
+   Move the `common.yml` file into the newly created `static-assignments` folder.
+
+
+This structured approach will help in organizing your Ansible playbooks effectively, making them more modular and easier to manage across different server configurations and requirements.
+
+<img width="249" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8927f3ed-9f34-4743-ad38-ce9dfc31f96f">
+
+
+4. **Inside `site.yml`, Import `common.yml` Playbook:**
+
+```yaml
+---
+- hosts: all
+  tasks:
+  - name: Import common.yml playbook
+    import_playbook: ../static-assignments/common.yml
+```
+
+The code above utilizes the built-in `import_playbook` Ansible module to include `common.yml`.
+
+**Folder Structure:**
+
+```
+├── static-assignments
+│   └── common.yml
+├── inventory
+│   ├── dev
+│   ├── stage
+│   ├── uat
+│   └── prod
+└── playbooks
+    └── site.yml
+```
+
+
+**5. Run `ansible-playbook` Command Against the Dev Environment**
+
+To apply tasks to your dev servers where Wireshark is already installed, proceed with creating another playbook under `static-assignments` named `common-del.yml`.
+
+In this playbook, configure deletion of wireshark utility:
+
+```yaml
+---
+- name: update web and nfs servers
+  hosts: webservers, nfs
+  remote_user: ec2-user
+  become: yes
+  become_user: root
+  tasks:
+  - name: delete wireshark
+    yum:
+      name: wireshark
+      state: removed
+
+- name: update LB and DB servers
+  hosts: lb, db
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  tasks:
+  - name: delete wireshark
+    apt:
+      name: wireshark
+      state: absent
+      autoremove: yes
+      purge: yes
+      autoclean: yes
+
+
+```
+
+<img width="620" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f2ba1e73-19f7-4fa3-84db-82e679bd0db5">
+
+
+Update `site.yml` with - `import_playbook: ../static-assignments/common-del.yml`  instead of `common.yml`
+
+
+```
+---
+- hosts: all
+- import_playbook: ../static-assignments/common-del.yml
+```
+
+Run it against dev servers
+
+```
+cd /home/ubuntu/ansible-config-mgt/
+
+ansible-playbook -i inventory/dev.yml playbooks/site.yaml
+```
+
+
 
