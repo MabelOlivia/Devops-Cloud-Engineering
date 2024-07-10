@@ -148,17 +148,16 @@ git branch roles-feature
 git switch roles-feature
 ```
 
-<img width="243" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3267a9e6-6014-4f7b-b3e0-4c8fdd43e806">
+<img width="243" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3267a9e6-6014-4f7b-b3e0-4c8fdd43e806"> <br>
+<br>
 
+<img width="461" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5b34da6c-553a-41dc-b946-bb9a964a89e3"> <br>
 
+<br>
 
-<img width="461" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5b34da6c-553a-41dc-b946-bb9a964a89e3">
+<img width="325" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0dd90497-7fb2-42bf-931a-f5f17ce69401"> <br>
 
-
-
-<img width="325" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0dd90497-7fb2-42bf-931a-f5f17ce69401">
-
-
+<br>
 
 Inside roles directory create your new MySQL role with ansible-galaxy install geerlingguy.mysql
 
@@ -167,4 +166,35 @@ Inside roles directory create your new MySQL role with ansible-galaxy install ge
 
 ```
 ansible-galaxy role install geerlingguy.mysql
+```
+
+<img width="402" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/a6056091-674b-4b53-874e-ddd2d869494d">
+
+**Rename the folder to mysql**
+
+```
+mv geerlingguy.mysql/ mysql
+or
+mv roles/geerlingguy.mysql roles/mysql
+```
+
+<img width="339" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/8cfccd2f-b9ba-4430-8ce0-35c25d943086">
+
+
+
+Read README.md file, and edit roles configuration to use correct credentials for MySQL required for the tooling website.
+
+**Create Database and mysql user (roles/mysql/vars/main.yml)**
+
+```
+mysql_root_password: ""
+mysql_databases:
+  - name: tooling
+    encoding: utf8
+    collation: utf8_general_ci
+mysql_users:
+  - name: webaccess
+    host: "172.31.32.0/20" # Webserver subnet cidr
+    password: Admin123
+    priv: "tooling.*:ALL"
 ```
