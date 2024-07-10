@@ -198,3 +198,57 @@ mysql_users:
     password: Admin123
     priv: "tooling.*:ALL"
 ```
+
+
+### Create a new playbook inside `static-assignments` folder and name it `db-servers.yml` , update it with mysql roles.
+
+```
+- hosts: db_servers
+  become: yes
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: mysql }
+```
+
+
+Now it is time to upload the changes into your GitHub:
+
+```
+git add .
+git commit -m "Commit new role files into GitHub"
+git push --set-upstream origin roles-feature
+```
+
+<img width="523" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/7bc8fa5f-b61d-4a61-b4ad-e5bff4fb1653">
+
+Now, if you are satisfied with your codes, you can create a Pull Request and Merge it to main branch on GitHub
+
+![image](https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dc4ffdbe-0eb2-4ac8-95a1-5b24f9d35b57)
+
+## Load Balancer roles
+
+We want to be able to choose which Load Balancer to use, Nginx or Apache, so we need to have two roles respectively:
+
+1. Nginx
+2. Apache
+   
+With your experience on Ansible so far you can:
+
+- Decide if you want to develop your own roles, or find available ones from the community
+  
+**Using the Community**
+
+<img width="586" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5f18e515-2260-4160-a9ee-a79d505854c7">
+
+<img width="586" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/1f484c0a-8178-4b7b-82fc-3a5bb4bab840">
+
+```
+ansible-galaxy role install geerlingguy.nginx
+
+ansible-galaxy role install geerlingguy.apache
+```
+
+<img width="466" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dc62950e-6acc-4e1f-8568-531353a56dee">
+
+
