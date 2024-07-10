@@ -103,7 +103,6 @@ Notice 3 things to notice here:
    - `with_first_found` implies that while looping through the list of files, the first one found is used. This is beneficial because it allows us to always set default values in case an environment-specific `env` file does not exist.
 
 
-
 ## Update `site.yml` with dynamic assignments
 
 Update the `site.yml` file to make use of the dynamic assignment. (At this point, we cannot test it yet. We are just setting the stage for what is yet to come. So hang on to your hats.)
