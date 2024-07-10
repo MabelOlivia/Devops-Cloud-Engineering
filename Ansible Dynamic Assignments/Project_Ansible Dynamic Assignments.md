@@ -125,3 +125,46 @@ Update the `site.yml` file to make use of the dynamic assignment. (At this point
 
 - import_playbook: ../static-assignments/loadbalancers.yml
 ```
+
+## Community Roles
+
+Now it is time to create a role for the MySQL database - it should install the MySQL package, create a database, and configure users. But why should we reinvent the wheel? There are tons of roles that have already been developed by other open-source engineers out there. These roles are actually production-ready and dynamic to accommodate most Linux flavors. With Ansible Galaxy, we can simply download a ready-to-use Ansible role and keep going.
+
+**Download MySQL Ansible Role**
+
+You can browse available community roles [here](https://galaxy.ansible.com). We will be using a MySQL role developed by geerlingguy.
+
+*Hint:* To preserve your GitHub in its current state after you install a new role, make a commit and push to the master branch of your `ansible-config-mgt` directory. Of course, you must have git installed and configured on the Jenkins-Ansible server. For more convenient work with code, you can configure Visual Studio Code to work with this directory. In this case, you will no longer need webhooks and Jenkins jobs to update your code on the Jenkins-Ansible server, so you can disable them - we will be using Jenkins later for a better purpose.
+
+
+
+On Jenkins-Ansible server make sure that git is installed with git --version, then go to ansible-config-mgt directory and run
+
+```
+git init
+git pull https://github.com/<your-name>/ansible-config-mgt.git
+git remote add origin https://github.com/<your-name>/ansible-config-mgt.git
+git branch roles-feature
+git switch roles-feature
+```
+
+<img width="243" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/3267a9e6-6014-4f7b-b3e0-4c8fdd43e806">
+
+
+
+<img width="461" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/5b34da6c-553a-41dc-b946-bb9a964a89e3">
+
+
+
+<img width="325" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/0dd90497-7fb2-42bf-931a-f5f17ce69401">
+
+
+
+Inside roles directory create your new MySQL role with ansible-galaxy install geerlingguy.mysql
+
+<img width="500" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/f2682216-b187-4115-916d-b5e984e15db9">
+
+
+```
+ansible-galaxy role install geerlingguy.mysql
+```
