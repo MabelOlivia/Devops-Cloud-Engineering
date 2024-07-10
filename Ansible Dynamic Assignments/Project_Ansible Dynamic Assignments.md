@@ -251,4 +251,86 @@ ansible-galaxy role install geerlingguy.apache
 
 <img width="466" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/dc62950e-6acc-4e1f-8568-531353a56dee">
 
+**Rename the installed Nginx and Apache roles**
 
+```
+mv roles/geerlingguy.nginx roles/nginx
+
+mv roles/geerlingguy.apache roles/apache
+```
+
+**Update both `static-assignment` and `site.yml` files to refer to the roles.**
+
+**Important Hints:**
+
+- Since you cannot use both Nginx and Apache load balancer, you need to add a condition to enable either one - this is where you can make use of variables.
+- Declare a variable in `defaults/main.yml` file inside the Nginx and Apache roles. Name each variable `enable_nginx_lb` and `enable_apache_lb` respectively.
+- Set both values to false like this: `enable_nginx_lb: false` and `enable_apache_lb: false`.
+- Declare another variable in both roles `load_balancer_is_required` and set its value to false as well.
+
+#### For nginx
+
+```
+# roles/nginx/defaults/main.yml
+enable_nginx_lb: false
+load_balancer_is_required: false
+```
+
+<img width="437" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/21206c17-e669-43db-b67b-5b155c2c7577">
+
+#### For apache
+
+```
+# roles/apache/defaults/main.yml
+enable_apache_lb: false
+load_balancer_is_required: false
+```
+
+#### Update assignment
+
+`loadbalancers.yml` file
+
+```
+---
+- hosts: lb
+  become: yes
+  roles:
+    - role: nginx
+      when: enable_nginx_lb | bool and load_balancer_is_required | bool
+    - role: apache
+      when: enable_apache_lb | bool and load_balancer_is_required | bool
+```
+
+<img width="644" alt="image" src="https://github.com/MabelOlivia/Devops-Cloud-Engineering/assets/70368706/ff84bfbd-27ec-43ad-b50e-b0186e38381a">
+
+#### Update `site.yml` files respectively
+
+```
+---
+- hosts: all
+  name: Include dynamic variables
+  become: yes
+  tasks:
+    - include_tasks: ../dynamic-assignments/env-vars.yml
+      tags:
+        - always
+
+- import_playbook: ../static-assignments/common.yml
+
+- import_playbook: ../static-assignments/uat-webservers.yml
+
+- import_playbook: ../static-assignments/loadbalancers.yml
+
+- import_playbook: ../static-assignments/db-servers.yml
+```
+
+Now you can make use of `env-vars/uat.yml` file to define which load balancer to use in the UAT environment by setting respective environmental variable to true.
+
+You will activate load balancer, and enable Nginx by setting these in the respective environment's `env-vars` file:
+
+#### Enable Nginx
+
+```yaml
+enable_nginx_lb: true
+load_balancer_is_required: true
+```
