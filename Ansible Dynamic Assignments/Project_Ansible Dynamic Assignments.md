@@ -125,5 +125,3 @@ Update the `site.yml` file to make use of the dynamic assignment. (At this point
 
 - import_playbook: ../static-assignments/loadbalancers.yml
 ```
-
-
