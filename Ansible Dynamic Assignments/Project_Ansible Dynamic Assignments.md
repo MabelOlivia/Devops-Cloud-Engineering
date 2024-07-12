@@ -591,3 +591,137 @@ db ansible_host=172.31.36.183 ansible_ssh_user='ubuntu'
 ```
 ansible-playbook -i inventory/uat playbooks/site.yml --extra-vars "@env-vars/uat.yml"
 ```
+<img width="727" alt="image" src="https://github.com/user-attachments/assets/461b9555-6e12-4928-a719-7e8cf4ee762f">
+
+<img width="731" alt="image" src="https://github.com/user-attachments/assets/39b91393-f3dc-4d2b-86d5-21c3e8ac369e">
+
+### Check Nginx status
+
+<img width="738" alt="image" src="https://github.com/user-attachments/assets/933b5503-ad68-4069-9d3d-40c8dfa3c847">
+
+
+### Check ansible configuration for Nginx
+
+```
+sudo vi /etc/nginx/nginx.conf
+```
+
+<img width="478" alt="image" src="https://github.com/user-attachments/assets/b059b363-1df4-4859-8283-f191d1f8c7d5">
+
+
+### Update the website's configuration with the database and user credentials to connect to the database (in /var/www/html/function.php file)
+
+```
+sudo vi /var/www/html/functions.php
+```
+
+
+#### Apply tooling-db.sql command on the webservers
+```
+sudo mysql -h 172.31.2.161 -u webaccess -p tooling < tooling-db.sql
+```
+
+#### Access the database server from Web Server
+
+```
+sudo mysql -h 172.31.2.161 -u webaccess -p
+```
+
+#### Create in MyQSL a new admin user with username: myuser and password: password
+
+```
+INSERT INTO users(id, username, password, email, user_type, status) VALUES (2, 'myuser', '5f4dcc3b5aa765d61d8327deb882cf99', 'user@mail.com', 'admin', '1');
+```
+
+### Access the tooling website using the LB's Public IP address on a browser
+
+<img width="569" alt="image" src="https://github.com/user-attachments/assets/df518761-369d-46bc-9f62-2379ef1f35d0">
+
+
+## Set up for Apache Load Balancer
+Update `roles/apache/tasks/configure-Dedian.yml`
+
+Configure Apache virtual host
+```
+---
+- name: Add apache vhosts configuration.
+  template:
+    src: "{{ apache_vhosts_template }}"
+    dest: "{{ apache_conf_path }}/sites-available/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  when: apache_create_vhosts | bool
+  become: yes
+
+- name: Enable Apache modules
+  ansible.builtin.shell:
+    cmd: "a2enmod {{ item }}"
+  loop:
+    - rewrite
+    - proxy
+    - proxy_balancer
+    - proxy_http
+    - headers
+    - lbmethod_bytraffic
+    - lbmethod_byrequests
+  notify: restart apache
+  become: yes
+
+- name: Insert load balancer configuration into Apache virtual host
+  ansible.builtin.blockinfile:
+    path: /etc/apache2/sites-available/000-default.conf
+    block: |
+      <Proxy "balancer://mycluster">
+        BalancerMember http://172.31.35.223:80
+        BalancerMember http://172.31.34.101:80
+        ProxySet lbmethod=byrequests
+      </Proxy>
+      ProxyPass "/" "balancer://mycluster/"
+      ProxyPassReverse "/" "balancer://mycluster/"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertbefore: "</VirtualHost>"
+  notify: restart apache
+  become: yes
+```
+
+#### Enable Apache (in `env-vars/uat.yml`)
+
+Switch Apache to true and nginx to false
+
+<img width="435" alt="image" src="https://github.com/user-attachments/assets/0bccc297-a6c9-4402-98f4-816ef9c55ef7">
+
+#### Update roles/apache/tasks/main.yml to create a task that check and stop nginx if it is running
+
+```
+---
+- name: Check if nginx is running
+  ansible.builtin.service_facts:
+
+- name: Stop and disable nginx if it is running
+  ansible.builtin.service:
+    name: nginx
+    state: stopped
+    enabled: no
+  when: "'nginx' in services and services['nginx'].state == 'running'"
+  become: yes
+```
+
+#### Comment out the references for the db-servers and uat-webservers playbook in site.yml file in order not to rerun the tasks. Only the reference to import the load balancer playbook should be left.
+
+Now run the playbook against the uat inventory
+```
+ansible-playbook -i inventory/uat playbooks/site.yml --extra-vars "@env-vars/uat.yml"
+```
+
+### Access the tooling website using the LB's Public IP address
+
+<img width="570" alt="image" src="https://github.com/user-attachments/assets/8d0afa1f-ccae-4a1f-8056-c204d6d678b3">
+
+<img width="564" alt="image" src="https://github.com/user-attachments/assets/8ee45ea7-1e95-469b-95a9-efc92d325d62">
+
+
+### Conclusion
+We have learned and practiced how to use Ansible configuration management tool to prepare UAT environment for Tooling web solution.
+
