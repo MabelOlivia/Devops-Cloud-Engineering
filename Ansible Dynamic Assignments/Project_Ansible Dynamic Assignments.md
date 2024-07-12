@@ -334,3 +334,260 @@ You will activate load balancer, and enable Nginx by setting these in the respec
 enable_nginx_lb: true
 load_balancer_is_required: true
 ```
+
+
+### Set up for Nginx Load Balancer
+
+Update `roles/nginx/defaults/main.yml`
+
+
+Configure Nginx virtual host
+
+```
+---
+nginx_vhosts:
+  - listen: "80"
+    server_name: "example.com"
+    root: "/var/www/html"
+    index: "index.php index.html index.htm"
+    locations:
+              - path: "/"
+                proxy_pass: "http://myapp1"
+
+    # Properties that are only added if defined:
+    server_name_redirect: "www.example.com"
+    error_page: ""
+    access_log: ""
+    error_log: ""
+    extra_parameters: ""
+    template: "{{ nginx_vhost_template }}"
+    state: "present"
+
+nginx_upstreams:
+- name: myapp1
+  strategy: "ip_hash"
+  keepalive: 16
+  servers:
+    - "172.31.35.223 weight=5"
+    - "172.31.34.101 weight=5"
+
+nginx_log_format: |-
+  '$remote_addr - $remote_user [$time_local] "$request" '
+  '$status $body_bytes_sent "$http_referer" '
+  '"$http_user_agent" "$http_x_forwarded_for"'
+become: yes
+```
+
+### Update roles/nginx/templates/nginx.conf.j2
+
+Comment the line include {{ nginx_vhost_path }}/*;
+
+This line renders the /etc/nginx/sites-enabled/ to the http configuration of Nginx.
+
+Create a server block template in Nginx.conf.j2 for nginx configuration file to override the default in nginx role.
+
+```
+{% for vhost in nginx_vhosts %}
+    server {
+        listen {{ vhost.listen }};
+        server_name {{ vhost.server_name }};
+        root {{ vhost.root }};
+        index {{ vhost.index }};
+
+    {% for location in vhost.locations %}
+        location {{ location.path }} {
+            proxy_pass {{ location.proxy_pass }};
+        }
+    {% endfor %}
+  }
+{% endfor %}
+
+```
+
+<img width="463" alt="image" src="https://github.com/user-attachments/assets/974b2c7d-ef49-4e05-8649-f1bb1ea4e0f1">
+
+
+### Update inventory/uat
+
+```
+[uat-webservers]
+<private-ip> ansible_ssh_user='ec2-user'
+<private-ip> ansible_ssh_user='ec2-user'
+
+[db-server]
+<private-ip> ansible_ssh_user='ubuntu'
+
+[lb]
+<private-ip> ansible_ssh_user='ubuntu'
+
+```
+
+```
+[lb]
+load_balancer ansible_host=172.31.38.203 ansible_ssh_user='ubuntu'
+
+[uat_webservers]
+Web1 ansible_host=172.31.43.69 ansible_ssh_user='ec2-user'
+Web2 ansible_host=172.31.35.242 ansible_ssh_user='ec2-user'
+
+[db_servers]
+db ansible_host=172.31.36.183 ansible_ssh_user='ubuntu'
+```
+
+### Update Webservers Role in roles/webservers/tasks/main.yml to install Epel, Remi's repoeitory, Apache, PHP and clone the tooling website from your GitHub repository
+
+```
+---
+- name: install apache
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.yum:
+    name: "httpd"
+    state: present
+
+- name: Enable apache
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.command:
+    cmd: sudo systemctl enable httpd
+
+- name: Install EPEL release
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.command:
+    cmd: sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y
+
+- name: Install dnf-utils and Remi repository
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.command:
+    cmd: sudo dnf install dnf-utils http://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
+
+- name: Reset PHP module
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.command:
+    cmd: sudo dnf module reset php -y
+
+- name: Enable PHP 8.2 module
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.command:
+    cmd: sudo dnf module enable php:remi-8.2 -y
+
+- name: Install PHP and extensions
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.yum:
+    name:
+      - php
+      - php-opcache
+      - php-gd
+      - php-curl
+      - php-mysqlnd
+    state: present
+
+- name: Install MySQL client
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.yum:
+    name: "mysql"
+    state: present
+
+- name: Start PHP-FPM service
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: php-fpm
+    state: started
+
+- name: Enable PHP-FPM service
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: php-fpm
+    enabled: true
+
+- name: Set SELinux policies for web servers
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.command:
+    cmd: sudo setsebool -P httpd_execmem 1
+    cmd: sudo setsebool -P httpd_can_network_connect=1
+    cmd: sudo setsebool -P httpd_can_network_connect_db=1
+
+- name: install git
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.yum:
+    name: "git"
+    state: present
+
+- name: clone a repo
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.git:
+    repo: https://github.com/francdomain/tooling.git
+    dest: /var/www/html
+    force: yes
+
+- name: copy html content to one level up
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  command: cp -r /var/www/html/html/ /var/www/
+
+- name: Start service httpd, if not started
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: httpd
+    state: started
+
+- name: recursively remove /var/www/html/html/ directory
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: /var/www/html/html
+    state: absent
+```
+
+### Update roles/nginx/tasks/main.yml with the code below to create a task that check and stop apache if it is running
+
+```
+---
+- name: Check if Apache is running
+  ansible.builtin.service_facts:
+
+- name: Stop and disable Apache if it is running
+  ansible.builtin.service:
+    name: apache2
+    state: stopped
+    enabled: no
+  when: "'apache2' in services and services['apache2'].state == 'running'"
+  become: yes
+```
+
+<img width="551" alt="image" src="https://github.com/user-attachments/assets/450af8e4-5d87-4e7f-8e24-61573eaec8c9">
+
+
+### Now run the playbook against your uat inventory
+
+```
+ansible-playbook -i inventory/uat playbooks/site.yml --extra-vars "@env-vars/uat.yml"
+```
