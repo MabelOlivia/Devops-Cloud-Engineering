@@ -199,18 +199,15 @@ Install Blue Ocean for better visualization of CD pipelines:
 - Select GitHub and connect using your personal access token.
 - Select the repository and create the pipeline.
 
-<img width="527" alt="image" src="https://github.com/user-attachments/assets/59371094-e9d8-4d2e-bd6e-cace0186eb65">
+<img width="527" alt="image" src="https://github.com/user-attachments/assets/59371094-e9d8-4d2e-bd6e-cace0186eb65"> <br>
 
-<img width="532" alt="image" src="https://github.com/user-attachments/assets/9015fcf1-19be-4aa7-9ce1-5dfba1026f65">
+<img width="532" alt="image" src="https://github.com/user-attachments/assets/9015fcf1-19be-4aa7-9ce1-5dfba1026f65"> <br>
 
-<img width="514" alt="image" src="https://github.com/user-attachments/assets/2f988765-d30e-4a01-bb73-cfb89dc0f886">
+<img width="514" alt="image" src="https://github.com/user-attachments/assets/2f988765-d30e-4a01-bb73-cfb89dc0f886"> <br>
 
-<img width="481" alt="image" src="https://github.com/user-attachments/assets/6b8c328a-5583-49cf-87ba-9bf303feaf2f">
+<img width="481" alt="image" src="https://github.com/user-attachments/assets/6b8c328a-5583-49cf-87ba-9bf303feaf2f"> <br>
 
-<img width="533" alt="image" src="https://github.com/user-attachments/assets/92ee01ad-0fb9-4a28-98d3-81202775fb80">
-
-
-
+<img width="533" alt="image" src="https://github.com/user-attachments/assets/92ee01ad-0fb9-4a28-98d3-81202775fb80"> <br>
 
 
 
@@ -234,12 +231,11 @@ pipeline {
 ```
 Update the pipeline configuration in Jenkins and build.
 
-<img width="531" alt="image" src="https://github.com/user-attachments/assets/90a08805-51b4-4868-8d21-d6c9cc9040e0">
+<img width="531" alt="image" src="https://github.com/user-attachments/assets/90a08805-51b4-4868-8d21-d6c9cc9040e0"> <br>
 
-<img width="535" alt="image" src="https://github.com/user-attachments/assets/ee8421d9-c92d-47ae-b821-42f23783d5df">
+<img width="535" alt="image" src="https://github.com/user-attachments/assets/ee8421d9-c92d-47ae-b821-42f23783d5df"> <br>
 
-<img width="535" alt="image" src="https://github.com/user-attachments/assets/de559937-c015-48d4-9961-e5111f3f9072">
-
+<img width="535" alt="image" src="https://github.com/user-attachments/assets/de559937-c015-48d4-9961-e5111f3f9072"> <br>
 
 
 
@@ -329,13 +325,13 @@ pipeline {
 }
 ```
 
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/f8e60388-9e35-47d0-ab00-4bae819a6442">
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/f8e60388-9e35-47d0-ab00-4bae819a6442"> <br>
 
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/e07175cb-8a87-4f25-a5fa-2645e872c18f">
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/e07175cb-8a87-4f25-a5fa-2645e872c18f"> <br>
 
-<img width="498" alt="image" src="https://github.com/user-attachments/assets/ba7569fe-9a62-4cd5-ae5d-15d0438a904c">
+<img width="498" alt="image" src="https://github.com/user-attachments/assets/ba7569fe-9a62-4cd5-ae5d-15d0438a904c"> <br>
 
-<img width="517" alt="image" src="https://github.com/user-attachments/assets/e6c029c7-f495-4d7d-b255-92b0d06a016b">
+<img width="517" alt="image" src="https://github.com/user-attachments/assets/e6c029c7-f495-4d7d-b255-92b0d06a016b"> <br>
 
 
 
@@ -459,11 +455,11 @@ string(name: 'ansible_tags', defaultValue: 'webserver', description: 'Ansible ta
 
 - Update the inventory and `ansible_tags` fields and click `Run` to execute the build.
 
-<img width="571" alt="image" src="https://github.com/user-attachments/assets/193d650e-cd85-465a-9666-894a1c102acf">
+<img width="571" alt="image" src="https://github.com/user-attachments/assets/193d650e-cd85-465a-9666-894a1c102acf"> <br>
 
-<img width="570" alt="image" src="https://github.com/user-attachments/assets/54cc60dd-d7f5-45b8-9dcc-8fa81a6b86e5">
+<img width="570" alt="image" src="https://github.com/user-attachments/assets/54cc60dd-d7f5-45b8-9dcc-8fa81a6b86e5"> <br>
 
-<img width="570" alt="image" src="https://github.com/user-attachments/assets/42526a54-c860-49a9-bd2e-48d2fe92cb1e">
+<img width="570" alt="image" src="https://github.com/user-attachments/assets/42526a54-c860-49a9-bd2e-48d2fe92cb1e"> <br>
 
 
 
@@ -661,9 +657,9 @@ ansible-galaxy collection install jfrog.platform
 
 Access the artifactory GUI on a browser with `http://<server public IP address>:8082`. Use the default authentication credentials: `admin` and `password` to login.
 
-<img width="570" alt="image" src="https://github.com/user-attachments/assets/18cb844c-a908-4e01-a44e-2cdfac30b529">
+<img width="570" alt="image" src="https://github.com/user-attachments/assets/18cb844c-a908-4e01-a44e-2cdfac30b529"> <br>
 
-<img width="566" alt="image" src="https://github.com/user-attachments/assets/aa8b9f87-c072-4873-8d3a-f62f1556d0fe">
+<img width="566" alt="image" src="https://github.com/user-attachments/assets/aa8b9f87-c072-4873-8d3a-f62f1556d0fe"> <br>
 
 
 
@@ -897,6 +893,12 @@ This plugin provides generic plotting (or graphing) capabilities in Jenkins. It 
 
 
 - Run the pipeline and View the Plot chart in Jenkins
+
+<img width="552" alt="image" src="https://github.com/user-attachments/assets/0d394f14-82e0-4c19-88d3-02dcce9904af">
+
+<img width="550" alt="image" src="https://github.com/user-attachments/assets/0edd8254-58a8-4219-a1cd-1415432ec458">
+
+
 
 
 
@@ -1195,9 +1197,12 @@ stage ('Deploy to Dev Environment') {
 
 - Check the artifactory for the uploaded artifact (`php-todo.zip`)
 
+<img width="571" alt="image" src="https://github.com/user-attachments/assets/6418fc16-8464-4e54-93b0-33d0b81929d1">
 
-### Visit a browser using the publis IP address to access the todo application
 
+### Visit a browser using the public IP address to access the todo application
+
+<img width="554" alt="image" src="https://github.com/user-attachments/assets/46d3cb3e-8f47-4970-a871-87186db94285">
 
 
 ### Configuring SonarQube: An Open-Source Platform for Continuous Code Quality Inspection
@@ -1475,6 +1480,9 @@ http://server_IP:9000 OR http://localhost:9000
 ```
 
 Log in with the default credentials: username `admin`, password `admin`.
+
+<img width="528" alt="image" src="https://github.com/user-attachments/assets/4b5e2bc4-69a9-431e-b702-0adabd984550">
+
 
 #### Automate SonarQube and PostgreSQL Setup with Ansible
 
