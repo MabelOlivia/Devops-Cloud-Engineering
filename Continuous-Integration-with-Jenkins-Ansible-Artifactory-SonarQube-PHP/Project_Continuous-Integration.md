@@ -59,7 +59,7 @@ We'll use Nginx as a reverse proxy for our sites and tools.
 - Make build results visible
 - Automate deployment for a fully automated CI/CD pipeline
 
-<img width="324" alt="image" src="https://github.com/user-attachments/assets/5416a85e-36f7-4389-a53e-8f0b33766bf5">
+<img width="524" alt="image" src="https://github.com/user-attachments/assets/5416a85e-36f7-4389-a53e-8f0b33766bf5">
 
 
 ## Project Description
@@ -205,7 +205,7 @@ Install Blue Ocean for better visualization of CD pipelines:
 
 <img width="514" alt="image" src="https://github.com/user-attachments/assets/2f988765-d30e-4a01-bb73-cfb89dc0f886"> <br>
 
-<img width="481" alt="image" src="https://github.com/user-attachments/assets/6b8c328a-5583-49cf-87ba-9bf303feaf2f"> <br>
+<img width="581" alt="image" src="https://github.com/user-attachments/assets/6b8c328a-5583-49cf-87ba-9bf303feaf2f"> <br>
 
 <img width="533" alt="image" src="https://github.com/user-attachments/assets/92ee01ad-0fb9-4a28-98d3-81202775fb80"> <br>
 
@@ -407,7 +407,7 @@ ansible_python_interpreter=/usr/bin/python
 <SIT-DB-Server-Private-IP-Address>
 ```
 
-<img width="404" alt="image" src="https://github.com/user-attachments/assets/0bbc6ff8-b4f5-4d96-ba86-34db59172a36">
+<img width="504" alt="image" src="https://github.com/user-attachments/assets/0bbc6ff8-b4f5-4d96-ba86-34db59172a36">
 
 
 2. **Introduce Parameterization in Jenkinsfile**
@@ -562,7 +562,7 @@ pipeline {
 }
 ```
 
-<img width="378" alt="image" src="https://github.com/user-attachments/assets/e7e0bb93-325f-4063-8e14-b43524e56c25">
+<img width="578" alt="image" src="https://github.com/user-attachments/assets/e7e0bb93-325f-4063-8e14-b43524e56c25">
 
 
 
