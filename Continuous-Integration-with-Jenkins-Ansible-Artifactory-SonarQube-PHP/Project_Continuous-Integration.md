@@ -1562,6 +1562,10 @@ sonar.php.tests.reportPath=build/logs/junit.xml
 
 Run your pipeline script. If successful, check the SonarQube UI for the quality gate status. The pipeline should fail if code quality does not meet the criteria.
 
+
+<img width="569" alt="image" src="https://github.com/user-attachments/assets/60e76a1c-488f-4fca-a9a3-8c853d80bcbe">
+
+
 #### Conditionally Deploy to Higher Environments
 
 Update `Jenkinsfile` to include conditional deployment based on branch names and quality gate results.
@@ -1572,13 +1576,35 @@ Update `Jenkinsfile` to include conditional deployment based on branch names and
 
    - Add two more servers as Jenkins slaves.
    - Install Java and Ansible on slave nodes.
+
+
+   <img width="567" alt="image" src="https://github.com/user-attachments/assets/634ba2c3-d73f-4b50-aa80-f8c768007b3b">
+
+
+
+   <img width="569" alt="image" src="https://github.com/user-attachments/assets/108d56a6-9a5d-4299-830c-add9b55a1dcf">
+
+
+	
    - Configure Jenkins to use these slaves for pipeline jobs.
 
-2. **Configure Webhook Between Jenkins and GitHub**
+
+     <img width="569" alt="image" src="https://github.com/user-attachments/assets/7d8f6217-1fec-4494-b896-02a6c77b803c">
+
+
+     <img width="570" alt="image" src="https://github.com/user-attachments/assets/e3bf34e6-fc73-4575-b5c2-f8dbeb8f7565">
+
+
+
+1. **Configure Webhook Between Jenkins and GitHub**
 
    - Set up a webhook in GitHub repository settings to trigger Jenkins builds on code push.
+  
 
-3. **Optional: Experience Pentesting**
+   <img width="533" alt="image" src="https://github.com/user-attachments/assets/8371de5c-5569-4f6a-9e66-ba44b96f3652">
+
+
+2. **Optional: Experience Pentesting**
 
    - Configure Wireshark in a pentest environment for exploration.
 
