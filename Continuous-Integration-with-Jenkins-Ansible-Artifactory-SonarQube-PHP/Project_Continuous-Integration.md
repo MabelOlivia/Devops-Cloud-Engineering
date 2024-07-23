@@ -1576,8 +1576,10 @@ Update `Jenkinsfile` to include conditional deployment based on branch names and
    - Configure Wireshark in a pentest environment for exploration.
 
    - Add the Wireshark role
+
+
   
-     ### Conclusion
+### Conclusion
 
 By finalizing these steps, you'll establish a comprehensive CI/CD pipeline using Jenkins, enhanced with quality gates through SonarQube, automated deployment with Ansible, scalability via Jenkins agents, and integration with GitHub through webhooks. This well-rounded setup will equip you to manage real-world DevOps challenges effectively. Be sure to adjust the configurations to fit your specific project needs and infrastructure.
 
