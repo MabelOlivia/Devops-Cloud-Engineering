@@ -1481,7 +1481,7 @@ http://server_IP:9000 OR http://localhost:9000
 
 Log in with the default credentials: username `admin`, password `admin`.
 
-<img width="528" alt="image" src="https://github.com/user-attachments/assets/4b5e2bc4-69a9-431e-b702-0adabd984550">
+<img width="728" alt="image" src="https://github.com/user-attachments/assets/4b5e2bc4-69a9-431e-b702-0adabd984550">
 
 
 #### Automate SonarQube and PostgreSQL Setup with Ansible
@@ -1508,9 +1508,16 @@ In SonarQube: `User > My Account > Security > Generate Tokens`.
 
 In SonarQube: `Administration > Configuration > Webhooks > Create`, set URL to `http://{JENKINS_HOST}/sonarqube-webhook/`.
 
+<img width="572" alt="image" src="https://github.com/user-attachments/assets/f8927b06-cbab-4901-88e0-394fc923ab0e">
+
+
 - **Setup SonarQube Scanner in Jenkins**
 
 Add configuration in Jenkins Global Tool Configuration.
+
+
+<img width="572" alt="image" src="https://github.com/user-attachments/assets/2759ea20-9b27-4d74-ad93-bc5e85b6d4c1">
+
 
 #### Update Jenkins Pipeline for SonarQube Scanning and Quality Gate
 
